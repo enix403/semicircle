@@ -1,0 +1,9 @@
+[workspace]
+
+members = [
+    "app_common",
+    "app_core",
+    "app_desktop",
+    "app_server",
+    "compileproto"
+]
