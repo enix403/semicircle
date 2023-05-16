@@ -4,13 +4,10 @@
 /node_modules
 /.pnp
 .pnp.js
+.vscode
 
 # testing
 /coverage
-
-# next.js
-/.next/
-/out/
 
 # production
 /build
@@ -28,8 +25,15 @@ yarn-error.log*
 .env*.local
 
 # vercel
-.vercel
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
+
+dist
+dist-ssr
+*.local
+.nyc_output
+coverage
+.eslintcache
+.stylelintcache
+cypress/videos
