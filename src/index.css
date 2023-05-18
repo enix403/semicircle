@@ -1,3 +1,5 @@
+/* stylelint-disable */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -24,4 +26,15 @@
     font-display: swap;
     src: url("/fonts/Inter-Bold.woff2") format("woff2");
   }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
 }

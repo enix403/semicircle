@@ -1,0 +1,26 @@
+@tailwind components;
+
+@layer components {
+  .anim-slide-bg {
+    background-size: 200% 200%;
+    transition: background-position 0.5s;
+
+    --current-background-color: theme("colors.purple.50");
+
+    background-image: linear-gradient(
+      to right,
+      theme("colors.purple.300") 50%,
+      var(--current-background-color) 0
+    );
+    background-position: right;
+  }
+
+  .anim-slide-bg.activated {
+    --current-background-color: theme("colors.purple.100");
+    background-position: left;
+  }
+
+  .anim-slide-bg:hover {
+    --current-background-color: theme("colors.purple.100");
+  }
+}

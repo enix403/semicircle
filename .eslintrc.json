@@ -20,7 +20,6 @@
     "airbnb-typescript",
     "airbnb/hooks",
     "plugin:react/jsx-runtime",
-    "plugin:unicorn/all",
     "plugin:react-prefer-function-component/recommended",
     "prettier"
   ],
@@ -57,6 +56,8 @@
     "@typescript-eslint/prefer-enum-initializers": "off",
     "@typescript-eslint/prefer-readonly-parameter-types": "off",
     "@typescript-eslint/prefer-regexp-exec": "off",
+    "@typescript-eslint/no-type-alias": "off",
+    "@typescript-eslint/consistent-type-definitions": "off",
     "@typescript-eslint/no-magic-numbers": [
       "warn",
       {
@@ -83,6 +84,8 @@
     "@typescript-eslint/prefer-includes": "off",
     "@typescript-eslint/no-restricted-imports": "off",
     "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/sort-type-constituents": "off",
+    "@typescript-eslint/prefer-function-type": "off",
     "import/no-deprecated": "error",
     "import/no-mutable-exports": "off",
     "import/order": "off",
@@ -150,10 +153,6 @@
     "react/jsx-no-constructed-context-values": "error",
     "react/jsx-no-script-url": "error",
     "react/jsx-no-useless-fragment": "error",
-    "unicorn/filename-case": "off",
-    "unicorn/no-nested-ternary": [
-      "error"
-    ]
   },
   "settings": {
     "react": {

@@ -6,6 +6,10 @@
       {
         "ignoreAtRules": ["tailwind", "layer"]
       }
-    ]
+    ],
+
+    "function-no-unknown": null,
+    "comment-empty-line-before": null,
+    "declaration-empty-line-before": null
   }
 }
