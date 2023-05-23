@@ -1,16 +1,13 @@
 package commands
 
 import (
-	"semicircle/web/app/models"
+	m "semicircle/web/app/models"
 
 	"gorm.io/gorm"
 )
 
+type _ m.BaseModel
+
 func SeedDatabase(db *gorm.DB) {
 	return
-	var item = models.RetailItem {
-		Name: "Item C",
-		Price: 4444,
-	}
-	db.Create(&item)
 }

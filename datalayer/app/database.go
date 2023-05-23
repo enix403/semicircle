@@ -8,6 +8,8 @@ import (
 	"gorm.io/gorm/schema"
 )
 
+type _ m.BaseModel
+
 type DBHandle *gorm.DB
 
 func ConnectToDatabase() *gorm.DB {
@@ -25,6 +27,21 @@ func ConnectToDatabase() *gorm.DB {
 
 func MigrateDB(db *gorm.DB) {
 	db.AutoMigrate(
-		&m.RetailItem{},
+		&m.StoreMeta{},
+		&m.AccountingEvent{},
+		&m.Customer{},
+		&m.CreditClearance{},
+		&m.Item{},
+		&m.Service{},
+		&m.ItemConversion{},
+		&m.Stock{},
+		&m.StockUpdateEvent{},
+		&m.Supplier{},
+		&m.SupplierAssignment{},
+		&m.BuyOrder{},
+		&m.BuyOrderItem{},
+		&m.Sale{},
+		&m.SaleItem{},
+		&m.SaleServiceOrder{},
 	)
 }

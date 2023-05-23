@@ -16,6 +16,8 @@ sales
 inventory/stock
 inventory adjustment due to wastage/theft/broken items
 
+convert one item to another
+
 supplies
     suppliers
     buy order

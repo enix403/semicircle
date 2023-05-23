@@ -16,6 +16,7 @@ AccountingEvents {
     //      buy orders
     //      TODO: business expenses
 
+    BeforeBalance [<- g::store current balance]
     Amount // (-/+)
     Kind // one of 4 above
 
@@ -30,10 +31,77 @@ Customers {
     Credit
 }
 
-CustomerCreditPayments {
+CreditClearance {
     Customer
     Amount
     Timestamp
+}
+
+--------------------------------
+
+Items {
+    Name
+
+    App Code
+    Bar Code
+    Bar Code Standard
+
+    Item Kind // Retail, Raw, Self Package
+
+    UnitInfo
+
+    Retail Price // should be unused in case of raw items
+
+    Open For Sale
+    Active
+}
+
+Services {
+    Name
+    Code
+    [Abstract] Price
+    Active
+}
+
+--------------------------------
+
+Conversion {
+    Source Item
+    Target Item
+
+    Delta Source // WholeQuantity
+    Delta Target // WholeQuantity
+
+    Wastage Source // WholeQuantity
+
+    Timestamp
+}
+
+--------------------------------
+
+Stocks {
+    Item
+    Current Qty // WholeQuantity
+    Last Updated
+}
+
+StockUpdateEvents {
+    Item
+    Delta Quantity // WholeQuantity
+    Timestamp
+    Kind // Manual Adjustment
+         // Buy Order Delivery
+         // Conversion
+         // Sale
+
+    optional Buy Order
+    optional Sale
+    optional Conversion
+    optional Manual Adjusment
+    ----- OR -----
+    optional Ref [Tagged by Kind]
+    ----- OR -----
+    [x] store StockUpdate Ref in these 3 (Belongs To)
 }
 
 --------------------------------
@@ -65,70 +133,21 @@ BuyOrder {
 }
 
 BuyOrderItems {
+    BuyOrder
     Item
     Rate & Rate Unit from SupplyAssignments (or override custom)
     Supply qty // WholeQuantity (unit will be the ad-hoc Rate Unit)
 }
 
---------------------------------
-
-Stocks {
-    Item
-    Current Qty // WholeQuantity
-    Last Updated
-}
-
-StockUpdateEvents {
-    Item
-    Delta Quantity (sub units)
-    Timestamp
-    Kind // Manual Adjustment
-         // Buy Order Delivery
-         // Converted
-         // Sale
-
-    optional Buy Order
-    optional Sale
-    optional Conversion
-    ----- OR -----
-    optional Ref [Tagged by Kind]
-    ----- OR -----
-    [x] store StockUpdate Ref in these 3 (Belongs To)
-}
 
 --------------------------------
 
-Items {
-    Name
-
-    App Code
-    Bar Code
-    Bar Code Standard
-
-    Item Kind // Retail, Raw, Self Package
-
-    UnitInfo
-
-    Retail Price // should be unused in case of raw items
-
-    Open For Sale
-    Active
-}
-
-Services {
-    Name
-    Code
-    [Abstract] Price
-    Active
-}
-
---------------------------------
 
 Sales {
     Grand total price
     Discount
 
-    Payment // Cash / Credit
+    PaymentMode // Cash / Credit
     Customer
 
     Timestamp
@@ -139,7 +158,7 @@ SaleItem {
     Item
 
     copy Item Price
-    Qty // CompositeQuantity
+    Qty // WholeQuantity (Composite on the Frontend)
 }
 
 SaleServiceOrder {
@@ -164,4 +183,7 @@ SaleServiceOrder {
     [Abstract] Output
     [Abstract] Cut
     [Abstract] Wastage
+
+    ---- or ----
+    [x]json service specific data[x]
 }
