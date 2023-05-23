@@ -1,0 +1,167 @@
+
+g::StoreMeta {
+   store opening balance
+   store opening date
+
+   store current balance
+}
+
+AccountingEvents {
+    // whenever balance changes
+
+    // changes are caused by
+    //      sale item payment (immediate)
+    //      sale services payment (delayed)
+    //      customer credit repayments 
+    //      buy orders
+    //      TODO: business expenses
+
+    Amount // (-/+)
+    Kind // one of 4 above
+
+    // record date
+    Timestamp
+}
+
+--------------------------------
+
+Customers {
+    Name
+    Credit
+}
+
+CustomerCreditPayments {
+    Customer
+    Amount
+    Timestamp
+}
+
+--------------------------------
+
+Suppliers {
+    Name
+
+    // FIXME: specify which item(s) this supplier provide, and only allow those items in a buy order
+
+    // TODO: Some conventional IDs:
+    //      National Tax Number (NTN)
+    //      Sales Tax Registration Number (STRN)
+}
+
+SupplyAssignments {
+    Supplier
+    Item
+    Rate
+    Rate Unit // CompositeQuantity
+}
+
+BuyOrder {
+    Supplier
+    Issue Date
+    Delivery Date
+    Status // Pending or Delivered
+
+    [BuyOrderItems]
+}
+
+BuyOrderItems {
+    Item
+    Rate & Rate Unit from SupplyAssignments (or override custom)
+    Supply qty // WholeQuantity (unit will be the ad-hoc Rate Unit)
+}
+
+--------------------------------
+
+Stocks {
+    Item
+    Current Qty // WholeQuantity
+    Last Updated
+}
+
+StockUpdateEvents {
+    Item
+    Delta Quantity (sub units)
+    Timestamp
+    Kind // Manual Adjustment
+         // Buy Order Delivery
+         // Converted
+         // Sale
+
+    optional Buy Order
+    optional Sale
+    optional Conversion
+    ----- OR -----
+    optional Ref [Tagged by Kind]
+    ----- OR -----
+    [x] store StockUpdate Ref in these 3 (Belongs To)
+}
+
+--------------------------------
+
+Items {
+    Name
+
+    App Code
+    Bar Code
+    Bar Code Standard
+
+    Item Kind // Retail, Raw, Self Package
+
+    UnitInfo
+
+    Retail Price // should be unused in case of raw items
+
+    Open For Sale
+    Active
+}
+
+Services {
+    Name
+    Code
+    [Abstract] Price
+    Active
+}
+
+--------------------------------
+
+Sales {
+    Grand total price
+    Discount
+
+    Payment // Cash / Credit
+    Customer
+
+    Timestamp
+}
+
+SaleItem {
+    Sale
+    Item
+
+    copy Item Price
+    Qty // CompositeQuantity
+}
+
+SaleServiceOrder {
+    Sale
+    Service
+    // Some Userform ID
+
+    Issue Date
+    Delivery Date
+    Status // Pending / Awaiting / HandedOver
+
+    Payment // Cash / Credit
+
+    copy Sale Customer
+    copy Service Price
+
+    [Abstract] Total Price
+    [Abstract] Discount
+
+    [Abstract] Value Unit Info
+    [Abstract] Input
+    [Abstract] Output
+    [Abstract] Cut
+    [Abstract] Wastage
+}

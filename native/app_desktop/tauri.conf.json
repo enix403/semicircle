@@ -2,8 +2,8 @@
 	"build": {
 		"beforeBuildCommand": "yarn run build && yarn run export",
 		"beforeDevCommand": "yarn run dev",
-		"devPath": "http://localhost:3000",
-		"distDir": "../../out"
+		"devPath": "http://localhost:4200",
+		"distDir": "../../dist"
 	},
 	"package": {
 		"productName": "semicircle",

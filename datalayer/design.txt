@@ -1,0 +1,201 @@
+==============
+|| Entities ||
+==============
+
+Retail Items
+Raw Items
+Self Packaged Items
+Services
+
+customers
+
+sales
+    Checkout
+    Payment
+
+inventory/stock
+inventory adjustment due to wastage/theft/broken items
+
+supplies
+    suppliers
+    buy order
+
+cash tally
+store balance
+TODO: misc business expenses/cost (shopping bags, sack, ...)
+
+Modules
+    Sales
+    Customers
+    Conversion
+    Accounting
+    Reporting
+    Inventory
+    Items
+    *Services*
+        |- No idea really what features to provide
+
+==================
+
+Store Balance
+-------------
+One time: Store has an initial balance along with the day it started. Does not change once set
+
+* Store Opening Balance = <something>
+
+Retail Items
+------------
+
+A tangible item.
+
+Metadata:
+    Name
+
+Pricing Info
+    Sell price (very dynamic, changes often)
+
+Quantity:
+    Each items needs to be "quantified" in order to sell it and keep in sync with the inventory (below)
+
+    Selling units can be *wildly* different than both inventory units AND supplied units from suppliers
+
+    Countable: 1, 2, 3, ...
+    Uncountable: <some float> kg
+
+Raw Items
+---------
+
+Same as Retail Items, but not for sale. These are items for self packaging
+
+Self Packaged Items
+-------------------
+
+Same as retail items with respect to sales. Difference comes in supplies and inventory managements. COUNTABLE only
+
+There needs to be a process that converts Raw Items (or maybe any item ??) to these Self Packaged Items
+    Source Item A
+    Target Item B
+
+    A <=> B -> dA, dB
+    A -= dA
+    B -= dB
+
+Service
+-------
+
+Basic difference b/w this and other items is that services' amounts get paid AFTER their successful completion, usually after a few days  
+
+There is currently only one service [regarding "wheat"]. It is as follows:
+
+    Customer provides wheat suppose X kg
+    Store initiats a tranform to floor
+    After a few days it is complete (store person comes and marks it complete)
+    Some amount Y kg just disappears as misc wastage during the process
+    Customer gets (X - Y) kg of FLOOR (different item) in return, but pays a full price of X kg
+
+    Another variant with additional "cleaning" of customer wheat. This has higher price and incurs more wastage
+
+
+Sales
+-----
+
+    Checkout
+    --------
+        This creates a cart
+        A cart is a combination of 0 or more of the following
+            |- Retai Item
+            |- Self Packaged Item
+            |- Services
+
+        Each element of items will specify a quantity, to deduce (only in case of items) from the inventory
+        
+
+    Payment
+    -------
+        Once a cart has been finalized, the customer needs chooses either direct cash payment or add the sale amount
+        to his store credit. For this the customer needs to be an approved and registered one beforehand by the store.
+
+Customers
+---------
+
+Small scale loan system.
+
+Have an opening credit amount
+
+Customer walks in. A complete checkout cycle takes place. But for payment, the customer delays the it according to their convenience.
+
+The funds are not received. For the time being store is in loss.
+
+They can come in anytime and clear the pending funds
+
+They can "pile up" funds over the time from multiple sales and every now and then come and initiate a clearance
+
+They can perform a normal payed sale too, irrespective of his pending funds. I.e Checkout \/ Payment.
+[x]Payment can be partial, in which case, remaining funds would be added to the total pending funds[x]
+Payment in this case cannot be partial. Either full sale amount or nothing
+
+* Payment -> Pending | Completed
+
+Inventory / Stock
+-----------------
+Stores "how much" of each item is there
+
+Inventory stores only the normalized quantity regardless of packs
+
+One of:
+    a) a high precision all float number
+    b) a pair of integers
+        |- 1st element stores the actual integral part
+        |- 2nd element stores the fractional part in some "subunit"
+        For example 2.75 kg would be stored as (2kg, 750g)
+    c) single integer storing a smaller non-fractional subunit
+        For example 2.75 kg would be stored as 2750g
+
+
+Supplies
+--------
+
+A supplier can be a permanent or one-time/anoynomous
+
+Items list for supplies are similar to a sale cart. Items supplied can be as single untis or in "packs"
+Packs:
+    1 box of 6 units of rio chocolate
+    4 sack of 20 kg of wheat
+    3 containers of 12 lt of oil
+    2 cartons of 15 units of coke bottle
+
+[x]You can have different packs of same items in a single order[x]
+
+Instead of directly updating the stock, a buy order is issued against a particular supplier with the above info 
+with the amount paid for it. After a few days the order is marked as delivered and inventory is updated
+
+Some suppliers also deliver extra units as "gifts" in a buy order. BUT this is mentioned at the time of order delivering.
+
+******************
+
+1 unit of rio chocolate
+60 kg of wheat
+2 units of coke bottle
+50rs handmade packet of <whatever>
+
+////////////////////
+
+Countable
+Fractional
+
+Inventory Qty -> Y sub-units (full) ==> WholeQuantity
+Supply Qty -> [P Containers] of X units [Y sub-units] ==> CompositeQuantity
+Sale Qty   -> [P Containers] of X units [Y sub-units] ==> <same>
+
+All 3 qtys can be generalized into 1
+{
+    P containers, X units, Y sub-units
+    Unit Info
+}
+
+Quantity
+
+Unit Info:
+    super unit name
+    sub unit name
+    divisions (e.g 1000), allowed-sub-parts (e.g 4 (250, 500, 750, 1000))
