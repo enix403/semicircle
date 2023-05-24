@@ -1,12 +1,12 @@
 package common
 
-type AccountingEventKind uint8
+type AccountingEventKind string
 
 const (
-	ACK_CLEAR_SALE_ITEM AccountingEventKind = iota + 1
-	ACK_CLEAR_SALE_SERVICE
-	ACK_CLEAR_CUSTOMER_CREDIT
-	ACK_PAY_BUY_ORDER
+	ACK_CLEAR_SALE_ITEM       AccountingEventKind = "clr_items"
+	ACK_CLEAR_SALE_SERVICE    AccountingEventKind = "clr_service"
+	ACK_CLEAR_CUSTOMER_CREDIT AccountingEventKind = "clr_credit"
+	ACK_PAY_BUY_ORDER         AccountingEventKind = "pay_bo"
 )
 
 type ItemKind string
