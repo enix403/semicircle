@@ -1,0 +1,15 @@
+
+
+get list of items
+    implement cqrs system
+    handle shared typings
+
+npx protoc --ts_out src/types/protos-ts/ --ts_opt long_type_string,generate_dependencies --proto_path datalayer/protos defs.proto
+
+
+
+npx protoc \
+    --ts_out src/types/protos-ts/ \
+    --ts_opt "long_type_string,generate_dependencies,optimize_code_size,ts_nocheck,eslint_disable,add_pb_suffix" \
+    --proto_path datalayer/protos \
+    defs.proto

@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-type _ m.BaseModel
+// type _ m.BaseDbModel
 
 type DBHandle *gorm.DB
 
