@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-// import "google.protobuf.Empty";
+option go_package = "twirp.sm";
 
 message Item {
   string name = 1;
@@ -11,17 +11,18 @@ message Item {
   string unit_code = 6;
   double price = 7;
   string open_for_sale = 8;
-  string active = 9;
+  bool active = 9;
 }
 
 message ItemList { repeated Item items = 1; }
 
-message ItemsQuerySettings {
+message ItemsQuery {
   optional bool include_inactive = 1;
   optional string kind = 2;
   optional bool include_not_open_for_sale = 3;
 }
 
-service OfferingService { //
-  rpc ItemsQuery(ItemsQuerySettings) returns (ItemList);
+
+service ItemsQueryService {
+  rpc CallItemsQuery(ItemsQuery) returns (ItemList);
 }

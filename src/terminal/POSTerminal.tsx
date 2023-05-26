@@ -3,8 +3,10 @@ import { OfferingCard } from "./OfferingCard";
 import { useTerminalStore } from "./state/store";
 
 import { genFakeRetailItem } from "faked/faked";
+import { callProtoQuery } from "repositories";
 
-import './terminal-global.css';
+import { ItemList, ItemsQuery } from "types/protos-ts/offerings_pb";
+import "./terminal-global.css";
 
 function makeGroups<T>(list: T[], len: number): T[][] {
   let result: T[][] = [];
@@ -30,7 +32,12 @@ export function POSTerminal(): ReactElement {
   const updateOfferings = useTerminalStore(store => store.updateOfferings);
 
   useEffect(() => {
-    (async function() {
+    (async function () {
+      {
+        let result = (await callProtoQuery(ItemsQuery)) as ItemList;
+        console.log(result);
+      }
+
       const items = new Array(20).fill(0).map(() => genFakeRetailItem());
       updateOfferings({
         allItems: items,

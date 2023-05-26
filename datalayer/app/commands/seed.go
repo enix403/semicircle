@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type _ m.BaseModel
+type _ m.BaseDbModel
 
 func SeedDatabase(db *gorm.DB) {
 	return

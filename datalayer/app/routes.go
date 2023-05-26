@@ -12,4 +12,7 @@ func LoadRoutes(app *c.Application) {
 	ctrlset := controllers.ControllerSet{App: app}
 
 	v1.Get("/", ctrlset.Ping)
+
+	queriesPath := v1.Group("/query")
+	queriesPath.All("/items", ctrlset.HandleItemsQuery)
 }
