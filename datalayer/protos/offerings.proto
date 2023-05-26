@@ -1,8 +1,32 @@
 syntax = "proto3";
 
-option go_package = "twirp.sm";
+option go_package = "protos.sm";
 
 message Item {
+  uint64 id = 1;
+  string name = 2;
+  string app_code = 3;
+  string bar_code = 4;
+  string bar_code_std = 5;
+  string kind = 6;
+  string unit_code = 7;
+  double price = 8;
+  string open_for_sale = 9;
+  bool active = 10;
+}
+
+message ItemList { repeated Item items = 1; }
+
+message QueryItems {
+  optional ItemList _SQ_Ret = 1601;
+
+  optional bool include_inactive = 1;
+  optional string kind = 2;
+  optional bool include_not_open_for_sale = 3;
+}
+
+
+message CmdCreateItem {
   string name = 1;
   string app_code = 2;
   string bar_code = 3;
@@ -11,18 +35,4 @@ message Item {
   string unit_code = 6;
   double price = 7;
   string open_for_sale = 8;
-  bool active = 9;
-}
-
-message ItemList { repeated Item items = 1; }
-
-message ItemsQuery {
-  optional bool include_inactive = 1;
-  optional string kind = 2;
-  optional bool include_not_open_for_sale = 3;
-}
-
-
-service ItemsQueryService {
-  rpc CallItemsQuery(ItemsQuery) returns (ItemList);
 }

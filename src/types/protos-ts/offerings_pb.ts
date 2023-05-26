@@ -9,6 +9,81 @@ import { MessageType } from "@protobuf-ts/runtime";
  */
 export interface Item {
     /**
+     * @generated from protobuf field: uint64 id = 1;
+     */
+    id: string;
+    /**
+     * @generated from protobuf field: string name = 2;
+     */
+    name: string;
+    /**
+     * @generated from protobuf field: string app_code = 3;
+     */
+    appCode: string;
+    /**
+     * @generated from protobuf field: string bar_code = 4;
+     */
+    barCode: string;
+    /**
+     * @generated from protobuf field: string bar_code_std = 5;
+     */
+    barCodeStd: string;
+    /**
+     * @generated from protobuf field: string kind = 6;
+     */
+    kind: string;
+    /**
+     * @generated from protobuf field: string unit_code = 7;
+     */
+    unitCode: string;
+    /**
+     * @generated from protobuf field: double price = 8;
+     */
+    price: number;
+    /**
+     * @generated from protobuf field: string open_for_sale = 9;
+     */
+    openForSale: string;
+    /**
+     * @generated from protobuf field: bool active = 10;
+     */
+    active: boolean;
+}
+/**
+ * @generated from protobuf message ItemList
+ */
+export interface ItemList {
+    /**
+     * @generated from protobuf field: repeated Item items = 1;
+     */
+    items: Item[];
+}
+/**
+ * @generated from protobuf message QueryItems
+ */
+export interface QueryItems {
+    /**
+     * @generated from protobuf field: optional ItemList _SQ_Ret = 1601;
+     */
+    SQRet?: ItemList;
+    /**
+     * @generated from protobuf field: optional bool include_inactive = 1;
+     */
+    includeInactive?: boolean;
+    /**
+     * @generated from protobuf field: optional string kind = 2;
+     */
+    kind?: string;
+    /**
+     * @generated from protobuf field: optional bool include_not_open_for_sale = 3;
+     */
+    includeNotOpenForSale?: boolean;
+}
+/**
+ * @generated from protobuf message CmdCreateItem
+ */
+export interface CmdCreateItem {
+    /**
      * @generated from protobuf field: string name = 1;
      */
     name: string;
@@ -40,50 +115,21 @@ export interface Item {
      * @generated from protobuf field: string open_for_sale = 8;
      */
     openForSale: string;
-    /**
-     * @generated from protobuf field: string active = 9;
-     */
-    active: string;
-}
-/**
- * @generated from protobuf message ItemList
- */
-export interface ItemList {
-    /**
-     * @generated from protobuf field: repeated Item items = 1;
-     */
-    items: Item[];
-}
-/**
- * @generated from protobuf message ItemsQuery
- */
-export interface ItemsQuery {
-    /**
-     * @generated from protobuf field: bool include_inactive = 1;
-     */
-    includeInactive: boolean;
-    /**
-     * @generated from protobuf field: optional string kind = 2;
-     */
-    kind?: string;
-    /**
-     * @generated from protobuf field: bool include_not_open_for_sale = 3;
-     */
-    includeNotOpenForSale: boolean;
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class Item$Type extends MessageType<Item> {
     constructor() {
         super("Item", [
-            { no: 1, name: "name", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "app_code", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: "bar_code", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 4, name: "bar_code_std", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 5, name: "kind", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 6, name: "unit_code", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 7, name: "price", kind: "scalar", T: 1 /*ScalarType.DOUBLE*/ },
-            { no: 8, name: "open_for_sale", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 9, name: "active", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+            { no: 1, name: "id", kind: "scalar", T: 4 /*ScalarType.UINT64*/ },
+            { no: 2, name: "name", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "app_code", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 4, name: "bar_code", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 5, name: "bar_code_std", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 6, name: "kind", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 7, name: "unit_code", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 8, name: "price", kind: "scalar", T: 1 /*ScalarType.DOUBLE*/ },
+            { no: 9, name: "open_for_sale", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 10, name: "active", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
         ]);
     }
 }
@@ -104,16 +150,36 @@ class ItemList$Type extends MessageType<ItemList> {
  */
 export const ItemList = new ItemList$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class ItemsQuery$Type extends MessageType<ItemsQuery> {
+class QueryItems$Type extends MessageType<QueryItems> {
     constructor() {
-        super("ItemsQuery", [
-            { no: 1, name: "include_inactive", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+        super("QueryItems", [
+            { no: 1601, name: "_SQ_Ret", kind: "message", T: () => ItemList },
+            { no: 1, name: "include_inactive", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
             { no: 2, name: "kind", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: "include_not_open_for_sale", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
+            { no: 3, name: "include_not_open_for_sale", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ }
         ]);
     }
 }
 /**
- * @generated MessageType for protobuf message ItemsQuery
+ * @generated MessageType for protobuf message QueryItems
  */
-export const ItemsQuery = new ItemsQuery$Type();
+export const QueryItems = new QueryItems$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class CmdCreateItem$Type extends MessageType<CmdCreateItem> {
+    constructor() {
+        super("CmdCreateItem", [
+            { no: 1, name: "name", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "app_code", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "bar_code", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 4, name: "bar_code_std", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 5, name: "kind", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 6, name: "unit_code", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 7, name: "price", kind: "scalar", T: 1 /*ScalarType.DOUBLE*/ },
+            { no: 8, name: "open_for_sale", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+}
+/**
+ * @generated MessageType for protobuf message CmdCreateItem
+ */
+export const CmdCreateItem = new CmdCreateItem$Type();

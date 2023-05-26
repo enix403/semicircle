@@ -2,11 +2,12 @@ import { POSTerminal } from "terminal/POSTerminal";
 
 import './repositories/index';
 
-import { Item, ItemList, ItemsQuery } from 'types/protos-ts/offerings_pb';
+import { CmdCreateItem, Item, ItemList, QueryItems } from 'types/protos-ts/offerings_pb';
 
 (window as any).Item = Item;
 (window as any).ItemList = ItemList;
-(window as any).ItemsQuery = ItemsQuery;
+(window as any).QueryItems = QueryItems;
+(window as any).CmdCreateItem = CmdCreateItem;
 
 const App = POSTerminal;
 

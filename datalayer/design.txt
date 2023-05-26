@@ -85,7 +85,7 @@ There needs to be a process that converts Raw Items (or maybe any item ??) to th
 Service
 -------
 
-Basic difference b/w this and other items is that services' amounts get paid AFTER their successful completion, usually after a few days  
+Basic difference b/w this and other items is that services' amounts get paid AFTER their successful completion, usually after a few days
 
 There is currently only one service [regarding "wheat"]. It is as follows:
 
@@ -110,7 +110,7 @@ Sales
             |- Services
 
         Each element of items will specify a quantity, to deduce (only in case of items) from the inventory
-        
+
 
     Payment
     -------
@@ -168,7 +168,7 @@ Packs:
 
 [x]You can have different packs of same items in a single order[x]
 
-Instead of directly updating the stock, a buy order is issued against a particular supplier with the above info 
+Instead of directly updating the stock, a buy order is issued against a particular supplier with the above info
 with the amount paid for it. After a few days the order is marked as delivered and inventory is updated
 
 Some suppliers also deliver extra units as "gifts" in a buy order. BUT this is mentioned at the time of order delivering.
@@ -221,4 +221,16 @@ select items
 items
 
 
+
+
+
+yaar baat suno ek baat krni he
+
+mera ye phups ka kaam bara zada he or bari der ho gyi he...
+or time bara mis manage ho raha he ab iska too much... aur iski waja se mein baqi kamon pe bhi focus nahi kr skra...
+kuch bhi kru ya krna start kru to mujhe hota he ye kaam rehta he pehle isko kru or phir koi kaam nahi hota.... ajeeeb isne bara kharab kia hua he
+
+ab isko khatam krna he krna he mene full focus ke sath taake thora set ho jau mein bhi.
+
+mein chahta hu ke kuch din 4 5 din mein isko full focus ke sath kru bghair time waste kiye bghair.....
 

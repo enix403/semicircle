@@ -1,3 +1,4 @@
 syntax = "proto3";
 
-option go_package = "twirp.sm";
+option go_package = "protos.sm";
+import public "offerings.proto";

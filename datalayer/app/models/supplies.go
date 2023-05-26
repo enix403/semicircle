@@ -14,24 +14,24 @@ type BORate struct {
 type Supplier struct {
 	BaseDbModel
 	Name string
-	// TODO: IDs like NTN etc
+	// TODO: Ids like NTN etc
 }
 
 type SupplierAssignment struct {
 	BaseDbModel
-	SupplierID uint
-	Supplier   Supplier `gorm:"foreignKey:SupplierID"`
+	SupplierId uint
+	Supplier   Supplier `gorm:"foreignKey:SupplierId"`
 
-	ItemID uint
-	Item   Item `gorm:"foreignKey:ItemID"`
+	ItemId uint
+	Item   Item `gorm:"foreignKey:ItemId"`
 
 	BORate
 }
 
 type BuyOrder struct {
 	BaseDbModel
-	SupplierID uint
-	Supplier   Supplier `gorm:"foreignKey:SupplierID"`
+	SupplierId uint
+	Supplier   Supplier `gorm:"foreignKey:SupplierId"`
 
 	IssuedAt    time.Time
 	DeliveredAt time.Time
@@ -41,11 +41,11 @@ type BuyOrder struct {
 type BuyOrderItem struct {
 	BaseDbModel
 
-	BuyOrderID uint
-	BuyOrder   BuyOrder `gorm:"foreignKey:BuyOrderID"`
+	BuyOrderId uint
+	BuyOrder   BuyOrder `gorm:"foreignKey:BuyOrderId"`
 
-	ItemID uint
-	Item   Item `gorm:"foreignKey:ItemID"`
+	ItemId uint
+	Item   Item `gorm:"foreignKey:ItemId"`
 
 	BORate
 	SupplyQty WholeQuantity

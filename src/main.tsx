@@ -4,7 +4,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 
-const MAX_RETRIES = 1;
+const MAX_RETRIES = 5;
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

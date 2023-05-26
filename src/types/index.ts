@@ -1,23 +1,8 @@
-export type AppTheme =
-  | 'light'
-  | 'dark';
-
-/* ================= */
-export interface RetailItem {
-  id: number;
-
-  name: string;
-  price: number;
-}
-
-export interface Service {
-  id: number;
-  name: string;
-}
+import { Item } from "./protos-ts/offerings_pb";
 
 export type AnyOffering =
-  | { kind: "retail_item"; item: RetailItem }
-  | { kind: "service"; service: Service };
+  | { kind: "retail_item"; item: Item }
+  // | { kind: "service"; service: Service };
 
 
 /* ================= */

@@ -1,8 +1,8 @@
 package app
 
 import (
-	"semicircle/web/app/controllers"
 	c "semicircle/web/app/common"
+	"semicircle/web/app/controllers"
 )
 
 func LoadRoutes(app *c.Application) {
@@ -13,6 +13,9 @@ func LoadRoutes(app *c.Application) {
 
 	v1.Get("/", ctrlset.Ping)
 
-	queriesPath := v1.Group("/query")
-	queriesPath.All("/items", ctrlset.HandleItemsQuery)
+	queriesPath := v1.Group("/q")
+	cmdsPath := v1.Group("/c")
+
+	queriesPath.All("/items", ctrlset.HandleQueryItems)
+	cmdsPath.All("/create-item", ctrlset.HandleCmdCreateItem)
 }

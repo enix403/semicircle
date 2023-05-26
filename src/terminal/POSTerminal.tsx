@@ -2,10 +2,9 @@ import { ReactElement, useEffect } from "react";
 import { OfferingCard } from "./OfferingCard";
 import { useTerminalStore } from "./state/store";
 
-import { genFakeRetailItem } from "faked/faked";
-import { callProtoQuery } from "repositories";
+import { callProtoService } from "repositories";
 
-import { ItemList, ItemsQuery } from "types/protos-ts/offerings_pb";
+import { QueryItems } from "types/protos-ts/offerings_pb";
 import "./terminal-global.css";
 
 function makeGroups<T>(list: T[], len: number): T[][] {
@@ -33,22 +32,22 @@ export function POSTerminal(): ReactElement {
 
   useEffect(() => {
     (async function () {
-      {
-        let result = (await callProtoQuery(ItemsQuery)) as ItemList;
-        console.log(result);
+      let result = await callProtoService(QueryItems);
+
+      if (result === null) {
+        console.log("Error Effect");
+        return;
       }
 
-      const items = new Array(20).fill(0).map(() => genFakeRetailItem());
+      console.log(result);
+
       updateOfferings({
-        allItems: items,
-        allServices: []
+        allItems: result.items
+        // allServices: []
       });
     })();
   }, []);
 
-  /*
-
-  */
   return (
     <div className='p-4'>
       {makeGroups(allItems, 4).map((itemsRow, index) => (

@@ -13,19 +13,19 @@ type Sale struct {
 
 	PaymentMode c.PaymentMode
 
-	CustomerID uint
-	Customer   *Customer `gorm:"foreignKey:CustomerID"`
+	CustomerId uint
+	Customer   *Customer `gorm:"foreignKey:CustomerId"`
 	Timestamp  time.Time
 }
 
 type SaleItem struct {
 	BaseDbModel
 
-	SaleID uint
-	Sale   Sale `gorm:"foreignKey:SaleID"`
+	SaleId uint
+	Sale   Sale `gorm:"foreignKey:SaleId"`
 
-	ItemID uint
-	Item   Item `gorm:"foreignKey:ItemID"`
+	ItemId uint
+	Item   Item `gorm:"foreignKey:ItemId"`
 
 	Price    MonetaryAmount
 	Quantity WholeQuantity
@@ -34,11 +34,11 @@ type SaleItem struct {
 type SaleServiceOrder struct {
 	BaseDbModel
 
-	SaleID uint
-	Sale   Sale `gorm:"foreignKey:SaleID"`
+	SaleId uint
+	Sale   Sale `gorm:"foreignKey:SaleId"`
 
-	ServiceID uint
-	Service   Service `gorm:"foreignKey:ServiceID"`
+	ServiceId uint
+	Service   Service `gorm:"foreignKey:ServiceId"`
 
 	IssuedAt    time.Time
 	FinalizedAt time.Time
@@ -46,8 +46,8 @@ type SaleServiceOrder struct {
 
 	PaymentMode c.PaymentMode
 
-	CustomerID uint
-	Customer   *Customer `gorm:"foreignKey:CustomerID"`
+	CustomerId uint
+	Customer   *Customer `gorm:"foreignKey:CustomerId"`
 
 	AbsPrice         MonetaryAmount
 	AbsTotalPrice    MonetaryAmount

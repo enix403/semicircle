@@ -8,8 +8,8 @@ import (
 type Stock struct {
 	BaseDbModel
 
-	ItemID uint
-	Item   Item `gorm:"foreignKey:ItemID"`
+	ItemId uint
+	Item   Item `gorm:"foreignKey:ItemId"`
 
 	Quantity  WholeQuantity
 	UpdatedAt time.Time
@@ -17,8 +17,8 @@ type Stock struct {
 
 type StockUpdateEvent struct {
 	BaseDbModel
-	ItemID uint
-	Item   Item `gorm:"foreignKey:ItemID"`
+	ItemId uint
+	Item   Item `gorm:"foreignKey:ItemId"`
 
 	DeltaQty  WholeQuantity
 	Kind      c.StockUpdateEventKind
@@ -28,5 +28,5 @@ type StockUpdateEvent struct {
 	// Sale
 	// Adjustment
 	// Conversion
-	RefID uint
+	RefId uint
 }

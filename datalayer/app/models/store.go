@@ -29,7 +29,7 @@ type AccountingEvent struct {
 	// 		Clearance of customer credit
 	//		Payment for a buy order
 	Kind        c.AccountingEventKind
-	// ID of whatever holds more information about the transaction
-	RefID       uint
+	// Id of whatever holds more information about the transaction
+	RefId       uint
 	Timestamp   time.Time
 }

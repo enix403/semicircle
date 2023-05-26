@@ -111,7 +111,7 @@ Suppliers {
 
     // FIXME: specify which item(s) this supplier provide, and only allow those items in a buy order
 
-    // TODO: Some conventional IDs:
+    // TODO: Some conventional Ids:
     //      National Tax Number (NTN)
     //      Sales Tax Registration Number (STRN)
 }
@@ -164,7 +164,7 @@ SaleItem {
 SaleServiceOrder {
     Sale
     Service
-    // Some Userform ID
+    // Some Userform Id
 
     Issue Date
     Delivery Date

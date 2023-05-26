@@ -3,8 +3,9 @@ package controllers
 import (
 	// c "semicircle/web/app/common"
 	"encoding/json"
+	"fmt"
 	_ "fmt"
-	protos_go "semicircle/web/twirp.sm"
+	protos_sm "semicircle/web/protos.sm"
 
 	// m "semicircle/web/app/models"
 	"github.com/gofiber/fiber/v2"
@@ -12,12 +13,10 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
+func (ctrl ControllerSet) HandleQueryItems(c *fiber.Ctx) error {
+	list := protos_sm.ItemList{}
 
-
-func (ctrl ControllerSet) HandleItemsQuery(c *fiber.Ctx) error {
-	list := protos_go.ItemList{}
-
-	list.Items = []*protos_go.Item {
+	list.Items = []*protos_sm.Item {
 		{
 			Name: "Item A",
 		},
@@ -37,18 +36,29 @@ func (ctrl ControllerSet) HandleItemsQuery(c *fiber.Ctx) error {
 	return c.JSON(json.RawMessage(resp[:]))
 }
 
+func (ctrl ControllerSet) HandleCmdCreateItem(c *fiber.Ctx) error {
+	cmd := protos_sm.CmdCreateItem{}
+
+    if err := c.BodyParser(&cmd); err != nil {
+        fmt.Println("error = ",err)
+        return c.SendStatus(401)
+    }
+
+    fmt.Printf("%#+v\n", cmd)
+    return c.JSON("Hello");
+}
 
 /*
 import (
 )
 
-type GetItemsQuery struct {
+type GetQueryItems struct {
 	IncludeInactive       bool
 	Kind                  c.ItemKind
 	IncludeNotOpenForSale bool
 }
 
-func (q *GetItemsQuery) Execute(app *c.Application) []m.Item {
+func (q *GetQueryItems) Execute(app *c.Application) []m.Item {
 	conds := make(map[string]interface{}, 3)
 
 	if !q.IncludeInactive {

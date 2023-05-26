@@ -1,12 +1,9 @@
-import { PlaceholderPane } from "components/PlaceholderPane/PlaceholderPane";
+import { Icon, Minus, Plus } from "@phosphor-icons/react";
+import classNames from "classnames";
 import React, { ReactElement } from "react";
+import { Item } from "types/protos-ts/offerings_pb";
 
 import "./OfferingCard.css";
-
-import { Icon, Minus, Plus } from "@phosphor-icons/react";
-
-import classNames from "classnames";
-import { RetailItem } from "types";
 
 function CounterIconButton(IconComp: Icon) {
   return (
@@ -36,7 +33,7 @@ const ProductCounter = (props: ProductCounterProps): ReactElement => {
 
 interface OfferingCardProps {
   activated?: boolean;
-  retail_item: RetailItem;
+  retail_item: Item;
 }
 export const OfferingCard = (props: OfferingCardProps): ReactElement => {
   // const activated = !!props.activated;

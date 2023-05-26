@@ -8,13 +8,13 @@ type Customer struct {
 	BaseDbModel
 	Name       string
 	Credit     MonetaryAmount
-	Clearances []CreditClearance `gorm:"foreignKey:CustomerID"`
+	Clearances []CreditClearance `gorm:"foreignKey:CustomerId"`
 }
 
 type CreditClearance struct {
 	BaseDbModel
-	CustomerID uint
-	Customer   Customer `gorm:"foreignKey:CustomerID"`
+	CustomerId uint
+	Customer   Customer `gorm:"foreignKey:CustomerId"`
 	Amount     MonetaryAmount
 	Timestamp  time.Time
 }

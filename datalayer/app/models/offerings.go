@@ -40,10 +40,10 @@ type Service struct {
 
 type ItemConversion struct {
 	BaseDbModel
-	SourceItemID uint
-	SourceItem   Item `gorm:"foreignKey:SourceItemID"`
-	TargetItemID uint
-	TargetItem   Item `gorm:"foreignKey:TargetItemID"`
+	SourceItemId uint
+	SourceItem   Item `gorm:"foreignKey:SourceItemId"`
+	TargetItemId uint
+	TargetItem   Item `gorm:"foreignKey:TargetItemId"`
 
 	DeltaSource WholeQuantity
 	DeltaTarget WholeQuantity

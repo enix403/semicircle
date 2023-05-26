@@ -3,11 +3,12 @@ import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import { createStore } from "zustand/vanilla";
 
-import type { AnyOffering, RetailItem, Service } from "types";
+import type { AnyOffering } from "types";
+import { Item } from "types/protos-ts/offerings_pb";
 
 type Offerings = {
-  allItems: RetailItem[];
-  allServices: Service[];
+  allItems: Item[];
+  // allServices: Service[];
 };
 
 type CartItem = {
@@ -37,7 +38,7 @@ export const terminalStore = createStore<
         // state
         offerings: {
           allItems: [],
-          allServices: []
+          // allServices: []
         },
         cart: [],
         counter: 0,
@@ -46,7 +47,7 @@ export const terminalStore = createStore<
         updateOfferings: offering =>
           set((state: TerminalStore) => {
             state.offerings.allItems = offering.allItems;
-            state.offerings.allServices = offering.allServices;
+            // state.offerings.allServices = offering.allServices;
           }),
         addToCart: _ => {},
       }),
