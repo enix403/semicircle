@@ -41,7 +41,9 @@ export const UnitInfoM = ((<any>window).UnitInfoM = new (class {
     failWithError(`Unit with code "${code.toString()}" not found`);
 })());
 
-export type WholeQuantity = { wholeValue: number };
+export type WholeQuantity = {
+  wholeValue: number;
+};
 export type CompositeQuantity = {
   containers: number;
   majorUnits: number;
@@ -131,5 +133,4 @@ export const QuantityM = ((<any>window).QuantityM = new (class {
   isZeroW(cwq: CompleteWholeQuantity): boolean {
     return cwq.qty.wholeValue == 0;
   }
-
 })());

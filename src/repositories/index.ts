@@ -50,13 +50,14 @@ export async function callProtoService<T extends object>(
       body: asJson
     });
   } catch (e) {
-    console.log("Error");
+    console.log("Fetch Error");
     return null;
   }
 
-  if (apiResponse.status != 200) {
-    console.log("Error status");
+  if (!apiResponse.ok) {
+    console.log("Response Error");
     return null;
+
   }
 
   const result = await apiResponse.json();

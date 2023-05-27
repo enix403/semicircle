@@ -26,8 +26,23 @@ function makeGroups<T>(list: T[], len: number): T[][] {
   return result;
 }
 
-export function POSTerminal(): ReactElement {
+function OfferingsPane(): ReactElement {
   const { allItems } = useTerminalStore(store => store.offerings);
+
+  return (
+    <div className='p-4 flex-[1.5]'>
+      {makeGroups(allItems, 5).map((itemsRow, index) => (
+        <div className='flex flex-row' key={index}>
+          {itemsRow.map(item => (
+            <OfferingCard key={item.id} retail_item={item} />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function POSTerminal(): ReactElement {
   const updateOfferings = useTerminalStore(store => store.updateOfferings);
 
   useEffect(() => {
@@ -47,14 +62,11 @@ export function POSTerminal(): ReactElement {
   }, []);
 
   return (
-    <div className='p-4'>
-      {makeGroups(allItems, 4).map((itemsRow, index) => (
-        <div className='flex flex-row' key={index}>
-          {itemsRow.map(item => (
-            <OfferingCard key={item.id} retail_item={item} />
-          ))}
-        </div>
-      ))}
-    </div>
+    <>
+      <div className="flex">
+        <OfferingsPane />
+        <div className="flex-1 bg-stone-700">3</div>
+      </div>
+    </>
   );
 }
