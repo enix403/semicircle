@@ -30,7 +30,7 @@ export async function callProtoService<T extends object>(
 
   let asJson = $ty.toJsonString(created, {
     emitDefaultValues: true,
-    useProtoFieldName: true
+    useProtoFieldName: false // FIXME: Temporary hack
   });
 
   let url = API_URL + remotePath;

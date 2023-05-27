@@ -4,20 +4,24 @@ import (
 	// c "semicircle/web/app/common"
 	"encoding/json"
 	"fmt"
-	_ "fmt"
 	pm "semicircle/web/protos.sm"
 
-	m "semicircle/web/app/models"
 	"github.com/gofiber/fiber/v2"
+	m "semicircle/web/app/models"
 
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
 var marshaller = protojson.MarshalOptions{
 	EmitUnpopulated: true,
-	UseProtoNames: true,
+	UseProtoNames:   false, // FIXME: Temporary hack
+	// this makes the client structures agree with its types
+	// use proper reponse type detection mechanism on client side
 }
 
+var unmarshaller = protojson.UnmarshalOptions{
+	DiscardUnknown: true,
+}
 
 func (ctrl ControllerSet) HandleQueryItems(c *fiber.Ctx) error {
 	list := pm.ItemList{}
@@ -26,13 +30,13 @@ func (ctrl ControllerSet) HandleQueryItems(c *fiber.Ctx) error {
 
 	ctrl.App.Db.Find(&items)
 	ret := make([]*pm.Item, len(items))
-    for i := range ret {
-    	a := &pm.Item{}
+	for i := range ret {
+		a := &pm.Item{}
 		items[i].HydrateProto(a)
 		ret[i] = a
-    }
+	}
 
-    list.Items = ret
+	list.Items = ret
 
 	resp, _ := marshaller.Marshal(&list)
 	return c.JSON(json.RawMessage(resp[:]))
@@ -41,12 +45,15 @@ func (ctrl ControllerSet) HandleQueryItems(c *fiber.Ctx) error {
 func (ctrl ControllerSet) HandleCmdCreateItem(c *fiber.Ctx) error {
 	cmd := pm.CmdCreateItem{}
 
-    if err := c.BodyParser(&cmd); err != nil {
-        fmt.Println("error = ",err)
-        return c.SendStatus(401)
-    }
+	// if err := c.BodyParser(&cmd); err != nil {
+	//     return c.SendStatus(401)
+	// }
+	if err := unmarshaller.Unmarshal(c.Body(), &cmd); err != nil {
+		fmt.Println("Unmarshal Error = ", err)
+		return c.SendStatus(401)
+	}
 
-    return c.JSON("Hello");
+	return c.JSON("Hello")
 }
 
 /*

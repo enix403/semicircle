@@ -1,3 +1,5 @@
+import { failWithError } from "utils";
+
 export type UnitInfo = {
   code: string;
 
@@ -18,7 +20,7 @@ const allUnits: UnitInfo[] = [
     minorLongName: "",
     minorShortName: "",
     divisions: 0,
-    naturalInterval: 0
+    naturalInterval: 1
   },
   {
     code: "kg",
@@ -32,10 +34,11 @@ const allUnits: UnitInfo[] = [
 ];
 
 export const UnitInfoM = ((<any>window).UnitInfoM = new (class {
-  isCountable(u: UnitInfo) {
-    return u.divisions == 0 || u.divisions == 1;
-  }
+  isCountable = (u: UnitInfo) => u.divisions == 0 || u.divisions == 1;
   all = () => allUnits as readonly UnitInfo[];
+  fromCode = (code: UnitInfo["code"]) =>
+    allUnits.find(u => u.code == code) ||
+    failWithError(`Unit with code "${code.toString()}" not found`);
 })());
 
 export type WholeQuantity = { wholeValue: number };
@@ -54,9 +57,9 @@ export type CompleteWholeQuantity = CompleteQuantity<WholeQuantity>;
 export type CompleteCompositeQuantity = CompleteQuantity<CompositeQuantity>;
 
 export const QuantityM = ((<any>window).QuantityM = new (class {
-  createC = (): CompositeQuantity => ({
+  createC = (major: number = 0): CompositeQuantity => ({
     containers: 1,
-    majorUnits: 0,
+    majorUnits: major,
     minorUnits: 0
   });
 
@@ -86,6 +89,15 @@ export const QuantityM = ((<any>window).QuantityM = new (class {
     }
   }
 
+  incrementMajorC(ccq: CompleteCompositeQuantity, deltaMajor: number = 1) {
+    ccq.qty.majorUnits += deltaMajor;
+    this.simplifyC(ccq);
+  }
+
+  incrementContainerC(ccq: CompleteCompositeQuantity, deltaCont: number = 1) {
+    ccq.qty.containers += deltaCont;
+  }
+
   incrementNaturalC(ccq: CompleteCompositeQuantity) {
     this.incrementC(ccq, ccq.unitInfo.naturalInterval);
   }
@@ -111,4 +123,13 @@ export const QuantityM = ((<any>window).QuantityM = new (class {
     this.incrementC(ret, cwq.qty.wholeValue);
     return ret;
   }
+
+  isZeroC(ccq: CompleteCompositeQuantity): boolean {
+    return ccq.qty.majorUnits == 0 && ccq.qty.minorUnits == 0;
+  }
+
+  isZeroW(cwq: CompleteWholeQuantity): boolean {
+    return cwq.qty.wholeValue == 0;
+  }
+
 })());
