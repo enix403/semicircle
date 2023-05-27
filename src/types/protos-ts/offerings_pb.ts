@@ -41,9 +41,9 @@ export interface Item {
      */
     price: number;
     /**
-     * @generated from protobuf field: string open_for_sale = 9;
+     * @generated from protobuf field: bool open_for_sale = 9;
      */
-    openForSale: string;
+    openForSale: boolean;
     /**
      * @generated from protobuf field: bool active = 10;
      */
@@ -112,9 +112,9 @@ export interface CmdCreateItem {
      */
     price: number;
     /**
-     * @generated from protobuf field: string open_for_sale = 8;
+     * @generated from protobuf field: bool open_for_sale = 8;
      */
-    openForSale: string;
+    openForSale: boolean;
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class Item$Type extends MessageType<Item> {
@@ -128,7 +128,7 @@ class Item$Type extends MessageType<Item> {
             { no: 6, name: "kind", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 7, name: "unit_code", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 8, name: "price", kind: "scalar", T: 1 /*ScalarType.DOUBLE*/ },
-            { no: 9, name: "open_for_sale", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 9, name: "open_for_sale", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
             { no: 10, name: "active", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
         ]);
     }
@@ -175,7 +175,7 @@ class CmdCreateItem$Type extends MessageType<CmdCreateItem> {
             { no: 5, name: "kind", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 6, name: "unit_code", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 7, name: "price", kind: "scalar", T: 1 /*ScalarType.DOUBLE*/ },
-            { no: 8, name: "open_for_sale", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+            { no: 8, name: "open_for_sale", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
         ]);
     }
 }

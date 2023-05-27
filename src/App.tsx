@@ -1,6 +1,7 @@
 import { POSTerminal } from "terminal/POSTerminal";
 
 import './repositories/index';
+import './types/quantification';
 
 import { CmdCreateItem, Item, ItemList, QueryItems } from 'types/protos-ts/offerings_pb';
 

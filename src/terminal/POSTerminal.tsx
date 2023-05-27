@@ -39,8 +39,6 @@ export function POSTerminal(): ReactElement {
         return;
       }
 
-      console.log(result);
-
       updateOfferings({
         allItems: result.items
         // allServices: []

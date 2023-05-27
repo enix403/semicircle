@@ -11,7 +11,7 @@ message Item {
   string kind = 6;
   string unit_code = 7;
   double price = 8;
-  string open_for_sale = 9;
+  bool open_for_sale = 9;
   bool active = 10;
 }
 
@@ -25,7 +25,6 @@ message QueryItems {
   optional bool include_not_open_for_sale = 3;
 }
 
-
 message CmdCreateItem {
   string name = 1;
   string app_code = 2;
@@ -34,5 +33,5 @@ message CmdCreateItem {
   string kind = 5;
   string unit_code = 6;
   double price = 7;
-  string open_for_sale = 8;
+  bool open_for_sale = 8;
 }

@@ -3,7 +3,7 @@ package models
 type WholeQuantity uint64
 
 type CompositeQuantity struct {
-	Containers uint
+	Containers uint32
 	MajorUnits uint32
 	MinorUnits uint32
 }

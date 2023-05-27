@@ -5,46 +5,47 @@ import (
 	"encoding/json"
 	"fmt"
 	_ "fmt"
-	protos_sm "semicircle/web/protos.sm"
+	pm "semicircle/web/protos.sm"
 
-	// m "semicircle/web/app/models"
+	m "semicircle/web/app/models"
 	"github.com/gofiber/fiber/v2"
 
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
+var marshaller = protojson.MarshalOptions{
+	EmitUnpopulated: true,
+	UseProtoNames: true,
+}
+
+
 func (ctrl ControllerSet) HandleQueryItems(c *fiber.Ctx) error {
-	list := protos_sm.ItemList{}
+	list := pm.ItemList{}
 
-	list.Items = []*protos_sm.Item {
-		{
-			Name: "Item A",
-		},
-		{
-			Name: "Item B",
-		},
-	}
+	var items []m.Item
 
-	m := protojson.MarshalOptions{
-		EmitUnpopulated: true,
-		UseProtoNames: true,
-		// Multiline: true,
-		// Indent: "  ",
-	}
-	resp, _ := m.Marshal(&list)
+	ctrl.App.Db.Find(&items)
+	ret := make([]*pm.Item, len(items))
+    for i := range ret {
+    	a := &pm.Item{}
+		items[i].HydrateProto(a)
+		ret[i] = a
+    }
 
+    list.Items = ret
+
+	resp, _ := marshaller.Marshal(&list)
 	return c.JSON(json.RawMessage(resp[:]))
 }
 
 func (ctrl ControllerSet) HandleCmdCreateItem(c *fiber.Ctx) error {
-	cmd := protos_sm.CmdCreateItem{}
+	cmd := pm.CmdCreateItem{}
 
     if err := c.BodyParser(&cmd); err != nil {
         fmt.Println("error = ",err)
         return c.SendStatus(401)
     }
 
-    fmt.Printf("%#+v\n", cmd)
     return c.JSON("Hello");
 }
 
