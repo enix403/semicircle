@@ -5,6 +5,7 @@ import { useTerminalStore } from "./state/store";
 import { callProtoService } from "repositories";
 
 import { QueryItems } from "types/protos-ts/offerings_pb";
+import { CartItemCard } from "./CartItemCard";
 import "./terminal-global.css";
 
 function makeGroups<T>(list: T[], len: number): T[][] {
@@ -30,7 +31,7 @@ function OfferingsPane(): ReactElement {
   const { allItems } = useTerminalStore(store => store.offerings);
 
   return (
-    <div className='p-4 flex-[1.5]'>
+    <div className='p-4 flex-[1.5] overflow-y-auto'>
       {makeGroups(allItems, 5).map((itemsRow, index) => (
         <div className='flex flex-row' key={index}>
           {itemsRow.map(item => (
@@ -63,9 +64,11 @@ export function POSTerminal(): ReactElement {
 
   return (
     <>
-      <div className="flex">
+      <div className="flex max-h-full overflow-hidden">
         <OfferingsPane />
-        <div className="flex-1 bg-stone-700">3</div>
+        <div className="flex-1 bg-slate-100 p-5 border-l-zinc-300 border-2 overflow-y-auto">
+            <CartItemCard />
+        </div>
       </div>
     </>
   );

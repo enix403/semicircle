@@ -65,7 +65,7 @@ export const OfferingCard = (props: OfferingCardProps): ReactElement => {
     >
       <div className='table h-full w-full table-fixed border-collapse' title={retail_item.name}>
         <div className='table-cell px-4 py-2 align-top'>
-          <p className='text-lg font-medium nt'>{retail_item.name}</p>
+          <p className='text-lg font-medium  nt'>{retail_item.name}</p>
           <p className='price text-sm text-slate-600 nt'>
             <span className="alt-font-1">{retail_item.price}/</span>
             <span>kg</span>

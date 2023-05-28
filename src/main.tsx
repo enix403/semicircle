@@ -1,3 +1,4 @@
+import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "App";
 import { StrictMode } from "react";
@@ -21,7 +22,9 @@ if (container) {
   root.render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        <App />
+        <ChakraProvider>
+          <App />
+        </ChakraProvider>
       </QueryClientProvider>
     </StrictMode>
   );
