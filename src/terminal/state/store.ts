@@ -14,15 +14,15 @@ type Offerings = {
   // allServices: Service[];
 };
 
-export type CartItem = {
-  cartId: string;
+export type CartEntry = {
+  offeringId: string;
   offering: AnyOffering;
   quantityCC: CompleteCompositeQuantity;
 };
 
 export interface TerminalState {
   offerings: Offerings;
-  cart: CartItem[];
+  cart: CartEntry[];
 }
 
 export type StoreSetCallback = (store: TerminalStore) => void;
@@ -32,6 +32,7 @@ export interface TerminalActions {
   updateOfferings: (updated: TerminalState["offerings"]) => void;
   addToCart: (offering: AnyOffering) => void;
   deleteFromCart: (offId: string) => void;
+  clearCart: () => void;
 
   //
   mutate: (callback: StoreSetCallback) => void;
@@ -65,6 +66,12 @@ export const terminalStore = createStore<
             state.offerings.allItems = updated.allItems;
             // state.offerings.allServices = offering.allServices;
           }),
+
+        clearCart: () => {
+          set(store => {
+            store.cart = [];
+          });
+        },
         addToCart: off => actions.addToCart(off, set),
         deleteFromCart: offId => actions.deleteFromCart(offId, set)
       }),
@@ -77,8 +84,9 @@ export const useTerminalStore = <T>(selector: (store: TerminalStore) => T) =>
   useStore(terminalStore, selector);
 
 export declare const gstore: TerminalStore;
-Object.defineProperty(window, "gstore", {
-  get: function () {
-    return terminalStore.getState();
-  }
-});
+if (typeof (window as any)["gstore"] === "undefined")
+  Object.defineProperty(window, "gstore", {
+    get: function () {
+      return terminalStore.getState();
+    }
+  });

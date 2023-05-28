@@ -31,7 +31,7 @@ function OfferingsPane(): ReactElement {
   const { allItems } = useTerminalStore(store => store.offerings);
 
   return (
-    <div className='p-4 flex-[1.5] overflow-y-auto'>
+    <div className='flex-[1.5] overflow-y-auto p-4'>
       {makeGroups(allItems, 5).map((itemsRow, index) => (
         <div className='flex flex-row' key={index}>
           {itemsRow.map(item => (
@@ -46,6 +46,11 @@ function OfferingsPane(): ReactElement {
 export function POSTerminal(): ReactElement {
   const updateOfferings = useTerminalStore(store => store.updateOfferings);
 
+  const addToCart = useTerminalStore(store => store.addToCart);
+  const clearCart = useTerminalStore(store => store.clearCart);
+
+  const cart = useTerminalStore(store => store.cart);
+
   useEffect(() => {
     (async function () {
       let result = await callProtoService(QueryItems);
@@ -59,16 +64,26 @@ export function POSTerminal(): ReactElement {
         allItems: result.items
         // allServices: []
       });
+
+      clearCart();
+      addToCart({ kind: "retail_item", item: result.items[3] });
+      addToCart({ kind: "retail_item", item: result.items[6] });
+      addToCart({ kind: "retail_item", item: result.items[2] });
+
     })();
   }, []);
 
+
+  // cart.filter(entry => entry.offering.kind == "retail_item")
+
   return (
     <>
-      <div className="flex max-h-full overflow-hidden">
+      <div className='flex max-h-full overflow-hidden'>
         <OfferingsPane />
-        <div className="flex-1 bg-slate-100 p-5 border-l-zinc-300 border-2 overflow-y-auto">
-            <CartItemCard />
-            <CartItemCard />
+        <div className='flex-1 overflow-y-auto border-2 border-l-zinc-300 bg-slate-100 p-5'>
+          {/* {cart.map(entry => (
+            <CartItemCard key={entry.offeringId} />
+          ))} */}
         </div>
       </div>
     </>

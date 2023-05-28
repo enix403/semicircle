@@ -5,6 +5,7 @@ import React from "react";
 import "./CartItemCard.css";
 
 import classNames from "classnames";
+import { Item } from "types/protos-ts/offerings_pb";
 import {
   CompleteCompositeQuantity,
   QuantityM,
@@ -39,7 +40,7 @@ const QuantityPicker = ({ qty: ccq }: QuantityPickerProps) => {
           <Input
             className='text-right'
             type='number'
-            value={ccq.qty.majorUnits}
+            defaultValue={ccq.qty.majorUnits}
           />
           <InputRightAddon children={unitInfo.majorShortName} />
         </InputGroup>
@@ -48,7 +49,7 @@ const QuantityPicker = ({ qty: ccq }: QuantityPickerProps) => {
             <Input
               className='text-right'
               type='number'
-              value={ccq.qty.minorUnits}
+              defaultValue={ccq.qty.minorUnits}
             />
             <InputRightAddon children={unitInfo.minorShortName} />
           </InputGroup>
@@ -81,14 +82,17 @@ let demoQty = QuantityM.simplifyC({
   unitInfo: UnitInfoM.fromCode("kg")
 });
 
-export const CartItemCard = () => {
+interface CartItemCardProps {
+  item: Item
+};
+export const CartItemCard = ({item}: CartItemCardProps) => {
   return (
     <div className='mt-4 flex h-16 items-center rounded-md border-2 border-amber-500 bg-white shadow-lg first:mt-0'>
       <div className='del-btn box-center aspect-square min-h-full cursor-pointer self-stretch bg-red-500/20 text-red-500 hover:bg-red-500/30'>
         <Trash weight='regular' size='2.012rem' />
       </div>
       <div className='flex-grow whitespace-nowrap pl-3 text-base font-medium'>
-        PC Item
+        {item.name}
       </div>
       <QuantityPicker qty={demoQty} />
       <SubtotalPreview qty={demoQty} />

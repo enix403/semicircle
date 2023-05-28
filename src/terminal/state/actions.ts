@@ -6,7 +6,7 @@ import {
   UnitInfoM
 } from "types/quantification";
 import { assertUnreachable } from "utils";
-import type { CartItem, StoreSetter } from "./store";
+import type { CartEntry, StoreSetter } from "./store";
 
 export function addToCart(offering: AnyOffering, set: StoreSetter) {
   let offId = makeAnyOfferingId(offering);
@@ -20,12 +20,16 @@ export function addToCart(offering: AnyOffering, set: StoreSetter) {
         unitInfo = UnitInfoM.fromCode(offering.item.unitCode);
         break;
       }
+      case "service": {
+        unitInfo = UnitInfoM.fromCode("pc");
+        break;
+      }
       default:
-        assertUnreachable(offering.kind);
+        assertUnreachable(offering);
     }
 
-    let newCartItem: CartItem = {
-      cartId: offId,
+    let newCartItem: CartEntry = {
+      offeringId: offId,
       offering: offering,
       quantityCC: {
         qty: QuantityM.createC(),
@@ -39,7 +43,7 @@ export function addToCart(offering: AnyOffering, set: StoreSetter) {
 
 export function deleteFromCart(offId: string, set: StoreSetter) {
   set(store => {
-    let index = store.cart.findIndex(off => off.cartId == offId);
+    let index = store.cart.findIndex(off => off.offeringId == offId);
     if (index != -1) {
       store.cart.splice(index, 1);
     }
