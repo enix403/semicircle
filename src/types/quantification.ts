@@ -136,12 +136,13 @@ export const QuantityM = ((<any>window).QuantityM = new (class {
     return cwq.qty.wholeValue == 0;
   }
 
-  renderValueC(ccq: CompleteCompositeQuantity): number {
-    let result = this.convertCTW(ccq).qty.wholeValue;
+  numericValueC(ccq: CompleteCompositeQuantity): number {
+    let { qty, unitInfo } = ccq;
+    let total = qty.majorUnits;
 
-    if (UnitInfoM.isCountable(ccq.unitInfo))
-      return result;
+    if (!UnitInfoM.isCountable(unitInfo))
+      total += qty.minorUnits / unitInfo.divisions;
 
-    return result / ccq.unitInfo.divisions;
+    return total * qty.containers;
   }
 })());

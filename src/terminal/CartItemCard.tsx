@@ -1,8 +1,16 @@
-import { Input, InputGroup, InputRightAddon, Stack } from "@chakra-ui/react";
+import {
+  Button,
+  Input,
+  InputGroup,
+  InputRightAddon,
+  Stack
+} from "@chakra-ui/react";
 import { Trash } from "@phosphor-icons/react";
 
 import React from "react";
 import "./CartItemCard.css";
+
+import { format } from "d3-format";
 
 import classNames from "classnames";
 import { Item } from "types/protos-ts/offerings_pb";
@@ -11,6 +19,10 @@ import {
   QuantityM,
   UnitInfoM
 } from "types/quantification";
+import { CartEntry } from "./state/store";
+
+
+const numformat = format(".2f");
 
 const FlexGrow = React.memo((props: React.HTMLProps<HTMLDivElement>) => {
   return (
@@ -34,7 +46,12 @@ const QuantityPicker = ({ qty: ccq }: QuantityPickerProps) => {
   let widthClass = fractional ? "w-60" : "w-36";
 
   return (
-    <div className={classNames("alt-font-1 mr-3 font-medium", widthClass)}>
+    <div
+      className={classNames(
+        "alt-font-1 mr-3 min-w-[14rem] font-medium",
+        widthClass
+      )}
+    >
       <Stack direction='row'>
         <InputGroup size='sm'>
           <Input
@@ -61,17 +78,22 @@ const QuantityPicker = ({ qty: ccq }: QuantityPickerProps) => {
 
 interface SubtotalPreviewProps {
   qty: CompleteCompositeQuantity;
+  price: number;
 }
-const SubtotalPreview = ({ qty: ccq }: SubtotalPreviewProps) => {
-  let qtyRendered = QuantityM.renderValueC(ccq);
+const SubtotalPreview = ({ qty: ccq, price }: SubtotalPreviewProps) => {
+  let qtyValue = QuantityM.numericValueC(ccq);
+  let subtotal = qtyValue * price;
   return (
-    <div className='alt-font-1 mr-3 w-36 text-right text-sm font-medium'>
+    <div className='alt-font-1 mr-3 w-36 flex-shrink-0 border-l-2 border-gray-200 text-right text-sm font-medium'>
       <p>
-        <span className='text-base text-blue-700'>{qtyRendered}</span>
-        <span className='text-xs text-slate-700'> {ccq.unitInfo.majorShortName} x 4520</span>
+        <span className='text-base text-blue-700'>{numformat(qtyValue)}</span>
+        <span className='text-xs text-slate-700'>
+          {" "}
+          {ccq.unitInfo.majorShortName} x {price}
+        </span>
       </p>
       <p>
-        = <span className='text-lg text-yellow-600'>74520</span>
+        = <span className='text-lg text-yellow-600'>{numformat(subtotal)}</span>
       </p>
     </div>
   );
@@ -83,19 +105,21 @@ let demoQty = QuantityM.simplifyC({
 });
 
 interface CartItemCardProps {
-  item: Item
-};
-export const CartItemCard = ({item}: CartItemCardProps) => {
+  itemEntry: CartEntry<Item>;
+}
+export const CartItemCard = ({ itemEntry }: CartItemCardProps) => {
+  const item = itemEntry.offering;
   return (
-    <div className='mt-4 flex h-16 items-center rounded-md border-2 border-amber-500 bg-white shadow-lg first:mt-0'>
+    <div className='mt-4 flex h-16 items-center rounded-md border-2 border-amber-500 bg-white shadow-lg first:mt-0' title={item.name}>
       <div className='del-btn box-center aspect-square min-h-full cursor-pointer self-stretch bg-red-500/20 text-red-500 hover:bg-red-500/30'>
         <Trash weight='regular' size='2.012rem' />
       </div>
-      <div className='flex-grow whitespace-nowrap pl-3 text-base font-medium'>
+      <div className='flex-grow whitespace-nowrap pl-3 text-base font-medium text-ellipsis overflow-x-hidden'>
         {item.name}
       </div>
+      {/* TODO: itemEntry.quantityCC */}
       <QuantityPicker qty={demoQty} />
-      <SubtotalPreview qty={demoQty} />
+      <SubtotalPreview qty={demoQty} price={item.price} />
     </div>
   );
 };

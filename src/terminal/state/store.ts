@@ -14,9 +14,9 @@ type Offerings = {
   // allServices: Service[];
 };
 
-export type CartEntry = {
+export type CartEntry<T = AnyOffering> = {
   offeringId: string;
-  offering: AnyOffering;
+  offering: T;
   quantityCC: CompleteCompositeQuantity;
 };
 

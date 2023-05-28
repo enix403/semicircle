@@ -1,10 +1,10 @@
 import { ReactElement, useEffect } from "react";
 import { OfferingCard } from "./OfferingCard";
-import { useTerminalStore } from "./state/store";
+import { CartEntry, useTerminalStore } from "./state/store";
 
 import { callProtoService } from "repositories";
 
-import { QueryItems } from "types/protos-ts/offerings_pb";
+import { Item, QueryItems } from "types/protos-ts/offerings_pb";
 import { CartItemCard } from "./CartItemCard";
 import "./terminal-global.css";
 
@@ -74,16 +74,24 @@ export function POSTerminal(): ReactElement {
   }, []);
 
 
-  // cart.filter(entry => entry.offering.kind == "retail_item")
+  let cartItems = cart.reduce((filtered, entry) => {
+    if (entry.offering.kind == "retail_item")
+      filtered.push({
+        ...entry,
+        offering: entry.offering.item
+      });
+
+    return filtered;
+  }, [] as CartEntry<Item>[]);
 
   return (
     <>
       <div className='flex max-h-full overflow-hidden'>
         <OfferingsPane />
         <div className='flex-1 overflow-y-auto border-2 border-l-zinc-300 bg-slate-100 p-5'>
-          {/* {cart.map(entry => (
-            <CartItemCard key={entry.offeringId} />
-          ))} */}
+          {cartItems.map(entry => (
+            <CartItemCard key={entry.offeringId} itemEntry={entry} />
+          ))}
         </div>
       </div>
     </>
