@@ -77,6 +77,8 @@ export const QuantityM = ((<any>window).QuantityM = new (class {
 
     ccq.qty.majorUnits += deltaMajor;
     ccq.qty.minorUnits = minor;
+
+    return ccq;
   }
 
   incrementC(ccq: CompleteCompositeQuantity, deltaMinor: number = 1) {
@@ -108,7 +110,7 @@ export const QuantityM = ((<any>window).QuantityM = new (class {
     const { qty, unitInfo } = ccq;
 
     let withoutContainers =
-      qty.majorUnits * unitInfo.divisions + qty.minorUnits;
+      qty.majorUnits * Math.max(unitInfo.divisions, 1) + qty.minorUnits;
     let total = withoutContainers * qty.containers;
 
     return {
@@ -132,5 +134,14 @@ export const QuantityM = ((<any>window).QuantityM = new (class {
 
   isZeroW(cwq: CompleteWholeQuantity): boolean {
     return cwq.qty.wholeValue == 0;
+  }
+
+  renderValueC(ccq: CompleteCompositeQuantity): number {
+    let result = this.convertCTW(ccq).qty.wholeValue;
+
+    if (UnitInfoM.isCountable(ccq.unitInfo))
+      return result;
+
+    return result / ccq.unitInfo.divisions;
   }
 })());

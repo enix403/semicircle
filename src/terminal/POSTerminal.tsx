@@ -68,6 +68,7 @@ export function POSTerminal(): ReactElement {
         <OfferingsPane />
         <div className="flex-1 bg-slate-100 p-5 border-l-zinc-300 border-2 overflow-y-auto">
             <CartItemCard />
+            <CartItemCard />
         </div>
       </div>
     </>

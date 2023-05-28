@@ -26,11 +26,11 @@ const FlexGrow = React.memo((props: React.HTMLProps<HTMLDivElement>) => {
 interface QuantityPickerProps {
   qty: CompleteCompositeQuantity;
 }
-const QuantityPicker = ({ qty }: QuantityPickerProps) => {
-  let unitInfo = qty.unitInfo;
+const QuantityPicker = ({ qty: ccq }: QuantityPickerProps) => {
+  let unitInfo = ccq.unitInfo;
   let fractional = !UnitInfoM.isCountable(unitInfo);
 
-  let widthClass = fractional ? "w-72" : "w-36";
+  let widthClass = fractional ? "w-60" : "w-36";
 
   return (
     <div className={classNames("alt-font-1 mr-3 font-medium", widthClass)}>
@@ -39,7 +39,7 @@ const QuantityPicker = ({ qty }: QuantityPickerProps) => {
           <Input
             className='text-right'
             type='number'
-            value={qty.qty.majorUnits}
+            value={ccq.qty.majorUnits}
           />
           <InputRightAddon children={unitInfo.majorShortName} />
         </InputGroup>
@@ -48,7 +48,7 @@ const QuantityPicker = ({ qty }: QuantityPickerProps) => {
             <Input
               className='text-right'
               type='number'
-              value={qty.qty.minorUnits}
+              value={ccq.qty.minorUnits}
             />
             <InputRightAddon children={unitInfo.minorShortName} />
           </InputGroup>
@@ -58,12 +58,16 @@ const QuantityPicker = ({ qty }: QuantityPickerProps) => {
   );
 };
 
-const SubtotalPreview = () => {
+interface SubtotalPreviewProps {
+  qty: CompleteCompositeQuantity;
+}
+const SubtotalPreview = ({ qty: ccq }: SubtotalPreviewProps) => {
+  let qtyRendered = QuantityM.renderValueC(ccq);
   return (
-    <div className='alt-font-1 mr-3 w-28 text-right text-sm font-medium'>
+    <div className='alt-font-1 mr-3 w-36 text-right text-sm font-medium'>
       <p>
-        <span className='text-base text-blue-700'>934</span> x{" "}
-        <span className='text-xs text-slate-700'>4520</span>
+        <span className='text-base text-blue-700'>{qtyRendered}</span>
+        <span className='text-xs text-slate-700'> {ccq.unitInfo.majorShortName} x 4520</span>
       </p>
       <p>
         = <span className='text-lg text-yellow-600'>74520</span>
@@ -72,22 +76,22 @@ const SubtotalPreview = () => {
   );
 };
 
-const demoQty: CompleteCompositeQuantity = {
-  qty: { containers: 1, majorUnits: 6, minorUnits: 500 },
+let demoQty = QuantityM.simplifyC({
+  qty: { containers: 1, majorUnits: 20, minorUnits: 250 },
   unitInfo: UnitInfoM.fromCode("kg")
-};
+});
 
 export const CartItemCard = () => {
   return (
     <div className='mt-4 flex h-16 items-center rounded-md border-2 border-amber-500 bg-white shadow-lg first:mt-0'>
-      <div className='box-center aspect-square min-h-full cursor-pointer self-stretch bg-red-500/20 text-red-500 hover:bg-red-500/30'>
+      <div className='del-btn box-center aspect-square min-h-full cursor-pointer self-stretch bg-red-500/20 text-red-500 hover:bg-red-500/30'>
         <Trash weight='regular' size='2.012rem' />
       </div>
       <div className='flex-grow whitespace-nowrap pl-3 text-base font-medium'>
         PC Item
       </div>
       <QuantityPicker qty={demoQty} />
-      <SubtotalPreview />
+      <SubtotalPreview qty={demoQty} />
     </div>
   );
 };
