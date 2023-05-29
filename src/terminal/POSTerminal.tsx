@@ -35,7 +35,7 @@ function OfferingsPane(): ReactElement {
       {makeGroups(allItems, 5).map((itemsRow, index) => (
         <div className='flex flex-row' key={index}>
           {itemsRow.map(item => (
-            <OfferingCard key={item.id} retail_item={item} />
+            <OfferingCard key={item.id} item={item} />
           ))}
         </div>
       ))}
@@ -50,6 +50,7 @@ export function POSTerminal(): ReactElement {
   const clearCart = useTerminalStore(store => store.clearCart);
 
   const cart = useTerminalStore(store => store.cart);
+
 
   useEffect(() => {
     (async function () {

@@ -58,8 +58,9 @@ const QuantityPicker = (props: QuantityPickerProps) => {
       <Stack direction='row'>
         <InputGroup size='sm'>
           <Input
-            className='text-right'
+            className='text-right invalid:text-red'
             type='number'
+            min={1}
             value={ccq.qty.majorUnits.toString()}
             onChange={e => {
               onChange?.({

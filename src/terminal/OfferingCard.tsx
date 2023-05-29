@@ -1,9 +1,11 @@
-import { Icon, Minus, Plus } from "@phosphor-icons/react";
+import { Icon, Minus, Plus, SelectionForeground } from "@phosphor-icons/react";
 import classNames from "classnames";
 import React, { ReactElement } from "react";
+import { makeAnyOfferingId } from "types";
 import { Item } from "types/protos-ts/offerings_pb";
 
 import "./OfferingCard.css";
+import { useTerminalStore } from "./state/store";
 
 function CounterIconButton(IconComp: Icon) {
   return (
@@ -33,16 +35,23 @@ const ProductCounter = (props: ProductCounterProps): ReactElement => {
 
 interface OfferingCardProps {
   activated?: boolean;
-  retail_item: Item;
+  item: Item;
 }
 export const OfferingCard = (props: OfferingCardProps): ReactElement => {
   // const activated = !!props.activated;
-  let [act, setAct] = React.useState(false);
+  // let [act, setAct] = React.useState(false);
 
-  const { retail_item } = props;
+  const addToCart = useTerminalStore(store => store.addToCart);
+  const cartItemIds = useTerminalStore(store => store.cart.map(entry => entry.offeringId));
 
-  let outOfStock = retail_item.id == "7";
-  let maxCapacityReached = retail_item.id == "16";
+  const { item } = props;
+
+
+  let itemOffId = makeAnyOfferingId({ kind: "retail_item", item }) ;
+  let act = cartItemIds.indexOf(itemOffId) != -1;
+
+  let outOfStock = false;
+  let maxCapacityReached = false;
 
   // temp
   if (maxCapacityReached) act = true;
@@ -60,18 +69,23 @@ export const OfferingCard = (props: OfferingCardProps): ReactElement => {
           : "cursor-pointer"
       )}
       onClick={e => {
-        if (!preventAddition) setAct(act => !act);
+        if (!preventAddition)
+          addToCart({
+            kind: "retail_item",
+            item: item
+          });
+          // setAct(act => !act);
         e.stopPropagation();
       }}
     >
       <div
         className='table h-full w-full table-fixed border-collapse'
-        title={retail_item.name}
+        title={item.name}
       >
         <div className='table-cell px-4 py-2 align-top'>
-          <p className='nt text-lg  font-medium'>{retail_item.name}</p>
+          <p className='nt text-lg  font-medium'>{item.name}</p>
           <p className='price nt text-sm text-slate-600'>
-            <span className='alt-font-1'>{retail_item.price}/</span>
+            <span className='alt-font-1'>{item.price}/</span>
             <span>kg</span>
           </p>
           {outOfStock && (

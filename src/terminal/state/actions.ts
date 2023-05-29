@@ -14,6 +14,13 @@ export function addToCart(offering: AnyOffering, set: StoreSetter) {
   // TODO: maybe handle duplicate offerings
 
   set(store => {
+    let existing = store.cart.find(entry => entry.offeringId == offId);
+    if (existing) {
+
+      existing.quantityCC.qty.majorUnits ++;
+      return;
+    }
+
     let unitInfo: UnitInfo;
     switch (offering.kind) {
       case "retail_item": {
