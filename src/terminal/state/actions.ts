@@ -1,4 +1,5 @@
-import { AnyOffering, makeAnyOfferingId } from "types";
+// import { AnyOffering, makeAnyOfferingId } from "types";
+import { Item } from "types/protos-ts/offerings_pb";
 import {
   CompositeQuantity,
   QuantityM,
@@ -6,49 +7,34 @@ import {
   UnitInfoM
 } from "types/quantification";
 import { assertUnreachable } from "utils";
-import type { CartEntry, StoreSetter } from "./store";
+import type { CartEntry, CartItemEntry, StoreSetter } from "./store";
 
-export function addToCart(offering: AnyOffering, set: StoreSetter) {
-  let offId = makeAnyOfferingId(offering);
+export function addToCart(item: Item, set: StoreSetter) {
+  // let offId = makeAnyOfferingId(offering);
 
   // TODO: maybe handle duplicate offerings
 
-  set(store => {
-    let existing = store.cart.find(entry => entry.offeringId == offId);
+  set(({ cart }) => {
+    let existing = cart.items.find(itEntry => itEntry.offering.id == item.id);
     if (existing) {
-
-      existing.quantityCC.qty.majorUnits ++;
+      existing.offQty.qty.majorUnits++;
       return;
     }
 
-    let unitInfo: UnitInfo;
-    switch (offering.kind) {
-      case "retail_item": {
-        unitInfo = UnitInfoM.fromCode(offering.item.unitCode);
-        break;
-      }
-      case "service": {
-        unitInfo = UnitInfoM.fromCode("pc");
-        break;
-      }
-      default:
-        assertUnreachable(offering);
-    }
+    const unitInfo = UnitInfoM.fromCode(item.unitCode);
 
-    let newCartItem: CartEntry = {
-      index: store.cart.length,
-      offeringId: offId,
-      offering: offering,
-      quantityCC: {
+    let newCartItem: CartItemEntry = {
+      offering: item,
+      offQty: {
         qty: QuantityM.createC(1),
         unitInfo
       }
     };
 
-    store.cart.push(newCartItem);
+    cart.items.push(newCartItem);
   });
 }
-
+/*
 export function deleteFromCart(offId: string, set: StoreSetter) {
   set(store => {
     let index = store.cart.findIndex(off => off.offeringId == offId);
@@ -62,3 +48,4 @@ export function deleteFromCart(offId: string, set: StoreSetter) {
     }
   });
 }
+ */

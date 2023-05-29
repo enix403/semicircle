@@ -44,14 +44,11 @@ function OfferingsPane(): ReactElement {
 }
 
 function CartPane() {
-  const cart = useTerminalStore(store => store.cart);
+  const {items} = useTerminalStore(store => store.cart);
   return (
     <div className='flex-1 overflow-y-auto border-2 border-l-zinc-300 bg-slate-100 p-5'>
-      {cart.map(entry => entry.offering.kind === "retail_item" && (
-        <CartItemCard key={entry.offeringId} itemEntry={{
-          ...entry,
-          offering: entry.offering.item
-        }} />
+      {items.map(entry => (
+        <CartItemCard key={entry.offering.id} itemEntry={entry} />
       ))}
     </div>
   );
@@ -77,9 +74,9 @@ export function POSTerminal(): ReactElement {
       });
 
       clearCart();
-      addToCart({ kind: "retail_item", item: result.items[3] });
-      addToCart({ kind: "retail_item", item: result.items[6] });
-      addToCart({ kind: "retail_item", item: result.items[2] });
+      addToCart(result.items[3]);
+      addToCart(result.items[6]);
+      addToCart(result.items[2]);
     })();
   }, []);
 

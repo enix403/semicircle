@@ -1,7 +1,6 @@
 import { Icon, Minus, Plus, SelectionForeground } from "@phosphor-icons/react";
 import classNames from "classnames";
 import React, { ReactElement } from "react";
-import { makeAnyOfferingId } from "types";
 import { Item } from "types/protos-ts/offerings_pb";
 
 import "./OfferingCard.css";
@@ -42,16 +41,14 @@ export const OfferingCard = (props: OfferingCardProps): ReactElement => {
   // let [act, setAct] = React.useState(false);
 
   const addToCart = useTerminalStore(store => store.addToCart);
-  const cartItemIds = useTerminalStore(store => store.cart.map(entry => entry.offeringId));
+  const cartItemIds = useTerminalStore(store => store.cart.items.map(entry => entry.offering.id));
 
   const { item } = props;
 
-  let itemOffId = makeAnyOfferingId({ kind: "retail_item", item }) ;
-  let act = cartItemIds.indexOf(itemOffId) != -1;
+  let act = cartItemIds.indexOf(item.id) != -1;
 
   let outOfStock = false;
   let maxCapacityReached = false;
-
   // temp
   if (maxCapacityReached) act = true;
 
@@ -69,10 +66,7 @@ export const OfferingCard = (props: OfferingCardProps): ReactElement => {
       )}
       onClick={e => {
         if (!preventAddition)
-          addToCart({
-            kind: "retail_item",
-            item: item
-          });
+          addToCart(item);
           // setAct(act => !act);
         e.stopPropagation();
       }}

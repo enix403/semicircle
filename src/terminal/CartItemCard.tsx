@@ -20,7 +20,7 @@ import {
   QuantityM,
   UnitInfoM
 } from "types/quantification";
-import { CartEntry, useTerminalStore } from "./state/store";
+import { CartEntry, CartItemEntry, useTerminalStore } from "./state/store";
 
 const numformat = format(".2f");
 
@@ -103,7 +103,7 @@ const Subtotal = ({ qty: ccq, price }: SubtotalProps) => {
 };
 
 interface CartItemCardProps {
-  itemEntry: CartEntry<Item>;
+  itemEntry: CartItemEntry;
 }
 export const CartItemCard = React.memo(
   ({ itemEntry }: CartItemCardProps) => {
@@ -125,12 +125,12 @@ export const CartItemCard = React.memo(
           {item.name}
         </div>
         <QuantityPicker
-          qty={itemEntry.quantityCC}
+          qty={itemEntry.offQty}
           onChange={newQty => {
-            updateEntryQuantity(itemEntry.offeringId, newQty);
+            // updateEntryQuantity(itemEntry.offering.id, newQty);
           }}
         />
-        <Subtotal qty={itemEntry.quantityCC} price={item.price} />
+        <Subtotal qty={itemEntry.offQty} price={item.price} />
       </div>
     );
   },
@@ -138,7 +138,7 @@ export const CartItemCard = React.memo(
   // only re render when it's own quantity changes
   (prevProps, newProps) =>
     QuantityM.compareC(
-      prevProps.itemEntry.quantityCC.qty,
-      newProps.itemEntry.quantityCC.qty
+      prevProps.itemEntry.offQty.qty,
+      newProps.itemEntry.offQty.qty
     )
 );

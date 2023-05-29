@@ -3,7 +3,6 @@ import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import { createStore } from "zustand/vanilla";
 
-import type { AnyOffering } from "types";
 import { Item } from "types/protos-ts/offerings_pb";
 import {
   CompleteCompositeQuantity,
@@ -17,16 +16,19 @@ type Offerings = {
   // allServices: Service[];
 };
 
-export type CartEntry<T = AnyOffering> = {
-  index: number;
-  offeringId: string;
+export type CartEntry<T, QtyType> = {
   offering: T;
-  quantityCC: CompleteCompositeQuantity;
+  offQty: QtyType;
 };
+export type CartItemEntry = CartEntry<Item, CompleteCompositeQuantity>;
+// export type CartServiceEntry = CartEntry<Service, number>;
 
 export interface TerminalState {
   offerings: Offerings;
-  cart: CartEntry[];
+  cart: {
+    items: CartItemEntry[],
+    // services: CartServiceEntry[],
+  }
 }
 
 export type StoreSetCallback = (store: TerminalStore) => void;
@@ -34,11 +36,11 @@ export type StoreSetter = (callback: StoreSetCallback) => void;
 
 export interface TerminalActions {
   updateOfferings: (updated: TerminalState["offerings"]) => void;
-  addToCart: (offering: AnyOffering) => void;
-  deleteFromCart: (offId: string) => void;
+  addToCart: (item: Item) => void;
+  // deleteFromCart: (offId: string) => void;
   clearCart: () => void;
 
-  updateEntryQuantity: (entryId: string, newQty: CompositeQuantity) => void;
+  updateEntryQuantity: (item: Item, newQty: CompositeQuantity) => void;
 
   //
   mutate: (callback: StoreSetCallback) => void;
@@ -58,11 +60,12 @@ export const terminalStore = createStore<
           allItems: []
           // allServices: []
         },
-        cart: [],
-        counter: 0,
+        cart: {
+          items: [],
+          // services: []
+        },
 
-        // actions
-
+        /* actions */
         mutate: callback => {
           set(callback);
         },
@@ -75,15 +78,15 @@ export const terminalStore = createStore<
 
         clearCart: () => {
           set(store => {
-            store.cart = [];
+            store.cart.items = [];
           });
         },
         addToCart: off => actions.addToCart(off, set),
-        deleteFromCart: offId => actions.deleteFromCart(offId, set),
-        updateEntryQuantity: (entryId, newQty) =>
+        // deleteFromCart: offId => actions.deleteFromCart(offId, set),
+        updateEntryQuantity: (item: Item, newQty) =>
           set(store => {
-            let target = store.cart.find(ent => ent.offeringId == entryId);
-            if (target) target.quantityCC.qty = newQty;
+            let target = store.cart.items.find(ent => ent.offering.id == item.id);
+            if (target) target.offQty.qty = newQty;
           })
       }),
       { name: "pos-terminal-store" }
@@ -95,9 +98,10 @@ export const useTerminalStore = <T>(selector: (store: TerminalStore) => T) =>
   useStore(terminalStore, selector);
 
 export declare const gstore: TerminalStore;
-if (typeof (window as any)["gstore"] === "undefined")
+if (typeof (window as any)["gstore"] === "undefined") {
   Object.defineProperty(window, "gstore", {
     get: function () {
       return terminalStore.getState();
     }
   });
+}

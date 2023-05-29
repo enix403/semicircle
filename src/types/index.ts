@@ -1,9 +1,12 @@
 import { assertUnreachable } from "utils";
 import { Item } from "./protos-ts/offerings_pb";
 
+export type Service = number;
+
+/*
 export type AnyOffering =
   | { kind: "retail_item"; item: Item }
-  | { kind: "service"; service: number };
+  | { kind: "service"; service: Service };
 
 export function makeAnyOfferingId(off: AnyOffering): string {
   switch (off.kind) {
@@ -15,5 +18,6 @@ export function makeAnyOfferingId(off: AnyOffering): string {
       assertUnreachable(off);
   }
 }
+ */
 
 /* ================= */
