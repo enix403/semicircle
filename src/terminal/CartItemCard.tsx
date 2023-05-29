@@ -5,7 +5,7 @@ import {
   InputRightAddon,
   Stack
 } from "@chakra-ui/react";
-import { Trash } from "@phosphor-icons/react";
+import { Storefront, Trash } from "@phosphor-icons/react";
 
 import React from "react";
 import "./CartItemCard.css";
@@ -16,11 +16,11 @@ import classNames from "classnames";
 import { Item } from "types/protos-ts/offerings_pb";
 import {
   CompleteCompositeQuantity,
+  CompositeQuantity,
   QuantityM,
   UnitInfoM
 } from "types/quantification";
-import { CartEntry } from "./state/store";
-
+import { CartEntry, useTerminalStore } from "./state/store";
 
 const numformat = format(".2f");
 
@@ -38,17 +38,20 @@ const FlexGrow = React.memo((props: React.HTMLProps<HTMLDivElement>) => {
 
 interface QuantityPickerProps {
   qty: CompleteCompositeQuantity;
+  onChange?: (newQty: CompositeQuantity) => void;
 }
-const QuantityPicker = ({ qty: ccq }: QuantityPickerProps) => {
+const QuantityPicker = (props: QuantityPickerProps) => {
+  const { qty: ccq, onChange } = props;
+  // console.log("QuantityPicker", ccq.qty.majorUnits)
   let unitInfo = ccq.unitInfo;
   let fractional = !UnitInfoM.isCountable(unitInfo);
 
-  let widthClass = fractional ? "w-60" : "w-36";
+  let widthClass = fractional ? "w-56" : "w-28";
 
   return (
     <div
       className={classNames(
-        "alt-font-1 mr-3 min-w-[14rem] font-medium",
+        "alt-font-1 mr-3 min-w-[5rem] font-medium",
         widthClass
       )}
     >
@@ -57,7 +60,13 @@ const QuantityPicker = ({ qty: ccq }: QuantityPickerProps) => {
           <Input
             className='text-right'
             type='number'
-            defaultValue={ccq.qty.majorUnits}
+            value={ccq.qty.majorUnits.toString()}
+            onChange={e => {
+              onChange?.({
+                ...ccq.qty,
+                majorUnits: +e.target.value || 0
+              });
+            }}
           />
           <InputRightAddon children={unitInfo.majorShortName} />
         </InputGroup>
@@ -109,17 +118,31 @@ interface CartItemCardProps {
 }
 export const CartItemCard = ({ itemEntry }: CartItemCardProps) => {
   const item = itemEntry.offering;
+
+  // TODO: optimize. This components (wastefully) re-renders way too much.
+
+  const updateEntryQuantity = useTerminalStore(
+    store => store.updateEntryQuantity
+  );
+
   return (
-    <div className='mt-4 flex h-16 items-center rounded-md border-2 border-amber-500 bg-white shadow-lg first:mt-0' title={item.name}>
+    <div
+      className='mt-4 flex h-16 items-center rounded-md border-2 border-amber-500 bg-white shadow-lg first:mt-0'
+      title={item.name}
+    >
       <div className='del-btn box-center aspect-square min-h-full cursor-pointer self-stretch bg-red-500/20 text-red-500 hover:bg-red-500/30'>
         <Trash weight='regular' size='2.012rem' />
       </div>
-      <div className='flex-grow whitespace-nowrap pl-3 text-base font-medium text-ellipsis overflow-x-hidden'>
+      <div className='flex-grow overflow-x-hidden text-ellipsis whitespace-nowrap pl-3 text-base font-medium'>
         {item.name}
       </div>
-      {/* TODO: itemEntry.quantityCC */}
-      <QuantityPicker qty={demoQty} />
-      <SubtotalPreview qty={demoQty} price={item.price} />
+      <QuantityPicker
+        qty={itemEntry.quantityCC}
+        onChange={newQty => {
+          updateEntryQuantity(itemEntry.offeringId, newQty);
+        }}
+      />
+      <SubtotalPreview qty={itemEntry.quantityCC} price={item.price} />
     </div>
   );
 };

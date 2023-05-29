@@ -69,10 +69,8 @@ export function POSTerminal(): ReactElement {
       addToCart({ kind: "retail_item", item: result.items[3] });
       addToCart({ kind: "retail_item", item: result.items[6] });
       addToCart({ kind: "retail_item", item: result.items[2] });
-
     })();
   }, []);
-
 
   let cartItems = cart.reduce((filtered, entry) => {
     if (entry.offering.kind == "retail_item")
@@ -86,7 +84,7 @@ export function POSTerminal(): ReactElement {
 
   return (
     <>
-      <div className='flex max-h-full overflow-hidden'>
+      <div className='flex h-full max-h-full overflow-hidden'>
         <OfferingsPane />
         <div className='flex-1 overflow-y-auto border-2 border-l-zinc-300 bg-slate-100 p-5'>
           {cartItems.map(entry => (

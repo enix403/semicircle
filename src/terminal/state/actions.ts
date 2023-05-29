@@ -29,10 +29,11 @@ export function addToCart(offering: AnyOffering, set: StoreSetter) {
     }
 
     let newCartItem: CartEntry = {
+      index: store.cart.length,
       offeringId: offId,
       offering: offering,
       quantityCC: {
-        qty: QuantityM.createC(),
+        qty: QuantityM.createC(1),
         unitInfo
       }
     };
@@ -47,6 +48,10 @@ export function deleteFromCart(offId: string, set: StoreSetter) {
     if (index != -1) {
       store.cart.splice(index, 1);
     }
+
+    // Re-create indexes
+    for (let i = 0; i < store.cart.length; ++i) {
+      store.cart[i].index = i;
+    }
   });
 }
-

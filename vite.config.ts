@@ -7,8 +7,5 @@ export default defineConfig(({ mode }) => ({
   server: {
     port: 4200
   },
-  plugins: [
-    tsconfigPaths(),
-    react(),
-  ]
+  plugins: [tsconfigPaths(), react()]
 }));

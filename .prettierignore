@@ -1,3 +1,6 @@
 /native
+/datalayer
 /node_modules
 /build
+/dist
+src/types/protos-ts

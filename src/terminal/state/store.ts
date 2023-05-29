@@ -5,7 +5,10 @@ import { createStore } from "zustand/vanilla";
 
 import type { AnyOffering } from "types";
 import { Item } from "types/protos-ts/offerings_pb";
-import { CompleteCompositeQuantity } from "types/quantification";
+import {
+  CompleteCompositeQuantity,
+  CompositeQuantity
+} from "types/quantification";
 
 import * as actions from "./actions";
 
@@ -15,6 +18,7 @@ type Offerings = {
 };
 
 export type CartEntry<T = AnyOffering> = {
+  index: number;
   offeringId: string;
   offering: T;
   quantityCC: CompleteCompositeQuantity;
@@ -33,6 +37,8 @@ export interface TerminalActions {
   addToCart: (offering: AnyOffering) => void;
   deleteFromCart: (offId: string) => void;
   clearCart: () => void;
+
+  updateEntryQuantity: (entryId: string, newQty: CompositeQuantity) => void;
 
   //
   mutate: (callback: StoreSetCallback) => void;
@@ -73,7 +79,12 @@ export const terminalStore = createStore<
           });
         },
         addToCart: off => actions.addToCart(off, set),
-        deleteFromCart: offId => actions.deleteFromCart(offId, set)
+        deleteFromCart: offId => actions.deleteFromCart(offId, set),
+        updateEntryQuantity: (entryId, newQty) =>
+          set(store => {
+            let target = store.cart.find(ent => ent.offeringId == entryId);
+            if (target) target.quantityCC.qty = newQty;
+          })
       }),
       { name: "pos-terminal-store" }
     )

@@ -57,7 +57,6 @@ export async function callProtoService<T extends object>(
   if (!apiResponse.ok) {
     console.log("Response Error");
     return null;
-
   }
 
   const result = await apiResponse.json();
