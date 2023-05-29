@@ -43,14 +43,24 @@ function OfferingsPane(): ReactElement {
   );
 }
 
+function CartPane() {
+  const cart = useTerminalStore(store => store.cart);
+  return (
+    <div className='flex-1 overflow-y-auto border-2 border-l-zinc-300 bg-slate-100 p-5'>
+      {cart.map(entry => entry.offering.kind === "retail_item" && (
+        <CartItemCard key={entry.offeringId} itemEntry={{
+          ...entry,
+          offering: entry.offering.item
+        }} />
+      ))}
+    </div>
+  );
+}
+
 export function POSTerminal(): ReactElement {
   const updateOfferings = useTerminalStore(store => store.updateOfferings);
-
   const addToCart = useTerminalStore(store => store.addToCart);
   const clearCart = useTerminalStore(store => store.clearCart);
-
-  const cart = useTerminalStore(store => store.cart);
-
 
   useEffect(() => {
     (async function () {
@@ -73,25 +83,11 @@ export function POSTerminal(): ReactElement {
     })();
   }, []);
 
-  let cartItems = cart.reduce((filtered, entry) => {
-    if (entry.offering.kind == "retail_item")
-      filtered.push({
-        ...entry,
-        offering: entry.offering.item
-      });
-
-    return filtered;
-  }, [] as CartEntry<Item>[]);
-
   return (
     <>
       <div className='flex h-full max-h-full overflow-hidden'>
         <OfferingsPane />
-        <div className='flex-1 overflow-y-auto border-2 border-l-zinc-300 bg-slate-100 p-5'>
-          {cartItems.map(entry => (
-            <CartItemCard key={entry.offeringId} itemEntry={entry} />
-          ))}
-        </div>
+        <CartPane />
       </div>
     </>
   );

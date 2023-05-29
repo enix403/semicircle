@@ -24,18 +24,6 @@ import { CartEntry, useTerminalStore } from "./state/store";
 
 const numformat = format(".2f");
 
-const FlexGrow = React.memo((props: React.HTMLProps<HTMLDivElement>) => {
-  return (
-    <div
-      {...props}
-      className={classNames(
-        "aspect-square flex-grow self-stretch",
-        props.className
-      )}
-    />
-  );
-});
-
 interface QuantityPickerProps {
   qty: CompleteCompositeQuantity;
   onChange?: (newQty: CompositeQuantity) => void;
@@ -86,17 +74,22 @@ const QuantityPicker = (props: QuantityPickerProps) => {
   );
 };
 
-interface SubtotalPreviewProps {
+interface SubtotalProps {
   qty: CompleteCompositeQuantity;
   price: number;
 }
-const SubtotalPreview = ({ qty: ccq, price }: SubtotalPreviewProps) => {
+const Subtotal = ({ qty: ccq, price }: SubtotalProps) => {
   let qtyValue = QuantityM.numericValueC(ccq);
   let subtotal = qtyValue * price;
+
+  let qtyRendered = UnitInfoM.isCountable(ccq.unitInfo)
+    ? qtyValue.toString()
+    : numformat(qtyValue);
+
   return (
     <div className='alt-font-1 mr-3 w-36 flex-shrink-0 border-l-2 border-gray-200 text-right text-sm font-medium'>
       <p>
-        <span className='text-base text-blue-700'>{numformat(qtyValue)}</span>
+        <span className='text-base text-blue-700'>{qtyRendered}</span>
         <span className='text-xs text-slate-700'>
           {" "}
           {ccq.unitInfo.majorShortName} x {price}
@@ -108,7 +101,6 @@ const SubtotalPreview = ({ qty: ccq, price }: SubtotalPreviewProps) => {
     </div>
   );
 };
-
 
 interface CartItemCardProps {
   itemEntry: CartEntry<Item>;
@@ -138,7 +130,7 @@ export const CartItemCard = React.memo(
             updateEntryQuantity(itemEntry.offeringId, newQty);
           }}
         />
-        <SubtotalPreview qty={itemEntry.quantityCC} price={item.price} />
+        <Subtotal qty={itemEntry.quantityCC} price={item.price} />
       </div>
     );
   },
