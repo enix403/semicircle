@@ -46,7 +46,6 @@ export const OfferingCard = (props: OfferingCardProps): ReactElement => {
 
   const { item } = props;
 
-
   let itemOffId = makeAnyOfferingId({ kind: "retail_item", item }) ;
   let act = cartItemIds.indexOf(itemOffId) != -1;
 

@@ -58,7 +58,7 @@ const QuantityPicker = (props: QuantityPickerProps) => {
       <Stack direction='row'>
         <InputGroup size='sm'>
           <Input
-            className='text-right invalid:text-red'
+            className='text-right'
             type='number'
             min={1}
             value={ccq.qty.majorUnits.toString()}
@@ -109,41 +109,44 @@ const SubtotalPreview = ({ qty: ccq, price }: SubtotalPreviewProps) => {
   );
 };
 
-let demoQty = QuantityM.simplifyC({
-  qty: { containers: 1, majorUnits: 20, minorUnits: 250 },
-  unitInfo: UnitInfoM.fromCode("kg")
-});
 
 interface CartItemCardProps {
   itemEntry: CartEntry<Item>;
 }
-export const CartItemCard = ({ itemEntry }: CartItemCardProps) => {
-  const item = itemEntry.offering;
+export const CartItemCard = React.memo(
+  ({ itemEntry }: CartItemCardProps) => {
+    const item = itemEntry.offering;
 
-  // TODO: optimize. This components (wastefully) re-renders way too much.
+    const updateEntryQuantity = useTerminalStore(
+      store => store.updateEntryQuantity
+    );
 
-  const updateEntryQuantity = useTerminalStore(
-    store => store.updateEntryQuantity
-  );
-
-  return (
-    <div
-      className='mt-4 flex h-16 items-center rounded-md border-2 border-blue-500 bg-white shadow-lg first:mt-0'
-      title={item.name}
-    >
-      <div className='del-btn box-center aspect-square min-h-full cursor-pointer self-stretch bg-blue-500/20 text-blue-500 hover:bg-blue-500/30'>
-        <Eye weight='regular' size='2.012rem' />
+    return (
+      <div
+        className='mt-4 flex h-16 items-center rounded-md border-2 border-blue-500 bg-white shadow-lg first:mt-0'
+        title={item.name}
+      >
+        <div className='del-btn box-center aspect-square min-h-full cursor-pointer self-stretch bg-blue-500/20 text-blue-500 hover:bg-blue-500/30'>
+          <Eye weight='regular' size='2.012rem' />
+        </div>
+        <div className='flex-grow overflow-x-hidden text-ellipsis whitespace-nowrap pl-3 text-base font-medium'>
+          {item.name}
+        </div>
+        <QuantityPicker
+          qty={itemEntry.quantityCC}
+          onChange={newQty => {
+            updateEntryQuantity(itemEntry.offeringId, newQty);
+          }}
+        />
+        <SubtotalPreview qty={itemEntry.quantityCC} price={item.price} />
       </div>
-      <div className='flex-grow overflow-x-hidden text-ellipsis whitespace-nowrap pl-3 text-base font-medium'>
-        {item.name}
-      </div>
-      <QuantityPicker
-        qty={itemEntry.quantityCC}
-        onChange={newQty => {
-          updateEntryQuantity(itemEntry.offeringId, newQty);
-        }}
-      />
-      <SubtotalPreview qty={itemEntry.quantityCC} price={item.price} />
-    </div>
-  );
-};
+    );
+  },
+
+  // only re render when it's own quantity changes
+  (prevProps, newProps) =>
+    QuantityM.compareC(
+      prevProps.itemEntry.quantityCC.qty,
+      newProps.itemEntry.quantityCC.qty
+    )
+);

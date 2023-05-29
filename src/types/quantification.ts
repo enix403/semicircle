@@ -136,6 +136,14 @@ export const QuantityM = ((<any>window).QuantityM = new (class {
     return cwq.qty.wholeValue == 0;
   }
 
+  compareC(a: CompositeQuantity, b: CompositeQuantity): boolean {
+    return (
+      a.containers == b.containers &&
+      a.majorUnits == b.majorUnits &&
+      a.minorUnits == b.minorUnits
+    );
+  }
+
   numericValueC(ccq: CompleteCompositeQuantity): number {
     let { qty, unitInfo } = ccq;
     let total = qty.majorUnits;
