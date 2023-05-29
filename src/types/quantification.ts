@@ -128,21 +128,21 @@ export const QuantityM = ((<any>window).QuantityM = new (class {
     return ret;
   }
 
-  isZeroC(ccq: CompleteCompositeQuantity): boolean {
-    return ccq.qty.majorUnits == 0 && ccq.qty.minorUnits == 0;
+  isZeroC(composite: CompositeQuantity): boolean {
+    return composite.majorUnits == 0 && composite.minorUnits == 0;
   }
 
-  isZeroW(cwq: CompleteWholeQuantity): boolean {
-    return cwq.qty.wholeValue == 0;
+  isZeroW(whole: WholeQuantity): boolean {
+    return whole.wholeValue == 0;
   }
 
-  compareC(a: CompositeQuantity, b: CompositeQuantity): boolean {
+  compareC = (a: CompositeQuantity, b: CompositeQuantity): boolean => {
     return (
       a.containers == b.containers &&
       a.majorUnits == b.majorUnits &&
       a.minorUnits == b.minorUnits
     );
-  }
+  };
 
   numericValueC(ccq: CompleteCompositeQuantity): number {
     let { qty, unitInfo } = ccq;

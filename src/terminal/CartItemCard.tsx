@@ -10,19 +10,16 @@ import { Eye } from "@phosphor-icons/react";
 import React from "react";
 import "./CartItemCard.css";
 
-import { format } from "d3-format";
-
 import classNames from "classnames";
-import { Item } from "types/protos-ts/offerings_pb";
 import {
   CompleteCompositeQuantity,
   CompositeQuantity,
   QuantityM,
   UnitInfoM
 } from "types/quantification";
-import { CartEntry, CartItemEntry, useTerminalStore } from "./state/store";
+import { CartItemEntry, useTerminalStore } from "./state/store";
 
-const numformat = format(".2f");
+import { numformat } from "./common";
 
 interface QuantityPickerProps {
   qty: CompleteCompositeQuantity;

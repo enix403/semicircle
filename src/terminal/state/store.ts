@@ -37,7 +37,6 @@ export type StoreSetter = (callback: StoreSetCallback) => void;
 export interface TerminalActions {
   updateOfferings: (updated: TerminalState["offerings"]) => void;
   addToCart: (item: Item) => void;
-  // deleteFromCart: (offId: string) => void;
   clearCart: () => void;
 
   updateEntryQuantity: (item: Item, newQty: CompositeQuantity) => void;
@@ -82,7 +81,6 @@ export const terminalStore = createStore<
           });
         },
         addToCart: off => actions.addToCart(off, set),
-        // deleteFromCart: offId => actions.deleteFromCart(offId, set),
         updateEntryQuantity: (item: Item, newQty) =>
           set(store => {
             let target = store.cart.items.find(ent => ent.offering.id == item.id);
@@ -94,8 +92,10 @@ export const terminalStore = createStore<
   )
 );
 
-export const useTerminalStore = <T>(selector: (store: TerminalStore) => T) =>
-  useStore(terminalStore, selector);
+export const useTerminalStore = <T>(
+  selector: (store: TerminalStore) => T,
+  equalityFn?: (a: T, b: T) => boolean
+) => useStore(terminalStore, selector, equalityFn);
 
 export declare const gstore: TerminalStore;
 if (typeof (window as any)["gstore"] === "undefined") {
