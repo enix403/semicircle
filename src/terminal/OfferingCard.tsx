@@ -7,7 +7,7 @@ import "./OfferingCard.css";
 
 function CounterIconButton(IconComp: Icon) {
   return (
-    <div className='flex aspect-square w-8 items-center justify-center rounded-full border border-green-800 hover:bg-green-800/10'>
+    <div className='flex aspect-square w-8 items-center justify-center rounded-full border border-gray-800 hover:bg-gray-800/10'>
       {<IconComp weight='regular' size='1.22rem' />}
     </div>
   );
@@ -44,6 +44,7 @@ export const OfferingCard = (props: OfferingCardProps): ReactElement => {
   let outOfStock = retail_item.id == "7";
   let maxCapacityReached = retail_item.id == "16";
 
+  // temp
   if (maxCapacityReached) act = true;
 
   const preventAddition = outOfStock || maxCapacityReached;
@@ -51,11 +52,12 @@ export const OfferingCard = (props: OfferingCardProps): ReactElement => {
   return (
     <div
       className={classNames(
-        "m-2 mb-0 h-40 grow cursor-pointer overflow-hidden rounded-md border-2 border-green-400",
+        "m-2 mb-0 h-40 grow overflow-hidden rounded-md border-2 border-gray-400",
         "anim-slide-bg",
         act && "activated [&_.price]:text-slate-950",
-        outOfStock &&
-          "disabled cursor-not-allowed border-gray-400 bg-gray-100 [&_.nt]:text-slate-400"
+        outOfStock
+          ? "disabled cursor-not-allowed border-gray-400 bg-gray-100 [&_.nt]:text-slate-400"
+          : "cursor-pointer"
       )}
       onClick={e => {
         if (!preventAddition) setAct(act => !act);

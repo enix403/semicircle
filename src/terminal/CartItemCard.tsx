@@ -5,7 +5,7 @@ import {
   InputRightAddon,
   Stack
 } from "@chakra-ui/react";
-import { Storefront, Trash } from "@phosphor-icons/react";
+import { Eye } from "@phosphor-icons/react";
 
 import React from "react";
 import "./CartItemCard.css";
@@ -127,11 +127,11 @@ export const CartItemCard = ({ itemEntry }: CartItemCardProps) => {
 
   return (
     <div
-      className='mt-4 flex h-16 items-center rounded-md border-2 border-amber-500 bg-white shadow-lg first:mt-0'
+      className='mt-4 flex h-16 items-center rounded-md border-2 border-blue-500 bg-white shadow-lg first:mt-0'
       title={item.name}
     >
-      <div className='del-btn box-center aspect-square min-h-full cursor-pointer self-stretch bg-red-500/20 text-red-500 hover:bg-red-500/30'>
-        <Trash weight='regular' size='2.012rem' />
+      <div className='del-btn box-center aspect-square min-h-full cursor-pointer self-stretch bg-blue-500/20 text-blue-500 hover:bg-blue-500/30'>
+        <Eye weight='regular' size='2.012rem' />
       </div>
       <div className='flex-grow overflow-x-hidden text-ellipsis whitespace-nowrap pl-3 text-base font-medium'>
         {item.name}

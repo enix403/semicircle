@@ -3,24 +3,27 @@
 @layer components {
   .anim-slide-bg:not(.disabled) {
     background-size: 200% 200%;
-    transition: background-position 0.5s;
+    transition: background-position 0.25s;
 
-    --current-background-color: theme("colors.green.50");
+    --current-background-color: theme("colors.gray.50");
 
     background-image: linear-gradient(
       to right,
-      theme("colors.green.300") 50%,
+      theme("colors.purple.300") 50%,
       var(--current-background-color) 0
     );
     background-position: right;
+
   }
 
   .anim-slide-bg.activated:not(.disabled) {
-    --current-background-color: theme("colors.green.100");
+    --current-background-color: theme("colors.purple.100");
     background-position: left;
+    @apply border-purple-500
   }
 
   .anim-slide-bg:not(.disabled):hover {
-    --current-background-color: theme("colors.green.100");
+    --current-background-color: theme("colors.purple.100");
+    @apply border-purple-500
   }
 }
