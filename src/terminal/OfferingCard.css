@@ -2,7 +2,7 @@
 
 @layer components {
   .anim-slide-bg:not(.disabled) {
-    background-size: 200.5% 200%; /* +0.5% on x-axis due to a small rendering artifact. Otherwise, should be 200% */
+    background-size: 200% 100%; /* +0.5% on x-axis due to a small rendering artifact. Otherwise, should be 200% */
     transition: background-position 0.35s;
 
     --current-background-color: theme("colors.gray.50");

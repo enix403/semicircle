@@ -1,14 +1,15 @@
 import { ReactElement, useEffect } from "react";
 import { OfferingCard } from "./OfferingCard";
-import { CartEntry, useTerminalStore } from "./state/store";
+import { useTerminalStore } from "./state/store";
 
 import { callProtoService } from "repositories";
 
 import { QueryItems } from "types/protos-ts/offerings_pb";
+import { QuantityM } from 'types/quantification';
 import { CartItemCard } from "./CartItemCard";
 import "./terminal-global.css";
 
-import { QuantityM, UnitInfoM } from 'types/quantification';
+import { Snowflake } from "@phosphor-icons/react";
 
 import { numformat } from "./common";
 
@@ -54,6 +55,12 @@ function CartPane() {
       {items.map(entry => (
         <CartItemCard key={entry.offering.id} itemEntry={entry} />
       ))}
+      {items.length == 0 && (
+        <div className="m-2 box-center h-full flex-col">
+          <Snowflake weight='light' size="16rem" />
+          <p className="text-base pb-10">No items added</p>
+        </div>
+      )}
     </div>
   );
 }
@@ -66,7 +73,7 @@ function StatBlock(props: StatBlockProps) {
   return (
     <div className='mx-2 inline-block'>
       <p className='text-center text-sm font-bold uppercase'>{props.name}</p>
-      <p className='alt-font-1 mt-1 text-right text-2xl font-medium underline underline-offset-4 text-yellow-400'>
+      <p className='alt-font-1 mt-1 text-right text-2xl font-medium text-amber-300'>
         {props.value}
       </p>
     </div>
@@ -114,9 +121,6 @@ export function POSTerminal(): ReactElement {
       });
 
       clearCart();
-      // addToCart(result.items[3]);
-      // addToCart(result.items[6]);
-      // addToCart(result.items[2]);
     })();
   }, []);
 

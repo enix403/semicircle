@@ -146,17 +146,17 @@ export const CartItemCard = React.memo(
     return (
       <div
         className={classNames(
-          "mt-4 flex h-16 items-center rounded-md border-2 bg-white shadow-lg transition-all first:mt-0 slide-in-blurred-top",
+          "slide-in-blurred-top group mt-4 flex h-16 items-center rounded-md border-2 bg-white shadow-lg transition-all first:mt-0",
           zeroQty
-            ? "border-4 border-red-500 shadow-2xl shadow-red-400"
+            ? "invalid border border-red-500 shadow-2xl shadow-red-400"
             : "border-blue-500"
         )}
         title={item.name}
       >
-        <div className='del-btn box-center aspect-square min-h-full cursor-pointer self-stretch bg-blue-500/20 text-blue-500 hover:bg-blue-500/30'>
+        <div className='box-center cart-entry-del-btn'>
           <Eye weight='regular' size='2.012rem' />
         </div>
-        <div className='flex-grow overflow-x-hidden text-ellipsis whitespace-nowrap pl-3 text-base font-medium'>
+        <div className='flex-grow overflow-x-hidden text-ellipsis whitespace-nowrap pl-3 text-base font-medium group-[.invalid]:text-red-500'>
           {item.name}
         </div>
         <QuantityPicker

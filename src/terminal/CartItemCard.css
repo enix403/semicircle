@@ -1,3 +1,9 @@
-#nothing {
-  --value: none;
+@tailwind components;
+
+@layer components {
+  .cart-entry-del-btn {
+    @apply aspect-square min-h-full cursor-pointer self-stretch;
+    @apply bg-blue-500/20 text-blue-500 hover:bg-blue-500/30;
+    @apply group-[.invalid]:bg-red-500/20 group-[.invalid]:text-red-500 hover:group-[.invalid]:bg-red-500/30;
+  }
 }
