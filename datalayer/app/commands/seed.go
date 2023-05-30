@@ -11,15 +11,24 @@ import (
 type _ m.BaseDbModel
 
 func SeedDatabase(db *gorm.DB) {
-	return
+	// return
 	addItems(db)
 }
 
 func addItems(db *gorm.DB) {
+	fracCount := 0
 	for i := 0; i < 50; i += 1 {
 		price := float64(115 * i + 70)
 		name := fmt.Sprintf("PC Item %d", i + 1)
 
-		db.Create(&m.Item{Name: name, UnitCode: "pc", Price: m.MonetaryAmount(price)})
+		var unitCode string
+		if i % 9 == 0 && fracCount < 5 {
+			unitCode = "kg"			
+			fracCount += 1
+		} else {
+			unitCode = "pc"
+		}
+
+		db.Create(&m.Item{Name: name, UnitCode: unitCode, Price: m.MonetaryAmount(price)})
 	}
 }

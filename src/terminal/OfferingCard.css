@@ -2,27 +2,27 @@
 
 @layer components {
   .anim-slide-bg:not(.disabled) {
-    background-size: 205% 200%; /* +5% on x-axis due to a small rendering artifact. Otherwise, should be 200% */
+    background-size: 200.5% 200%; /* +0.5% on x-axis due to a small rendering artifact. Otherwise, should be 200% */
     transition: background-position 0.35s;
 
     --current-background-color: theme("colors.gray.50");
 
     background-image: linear-gradient(
       to right,
-      theme("colors.red.300") 50%,
+      theme("colors.amber.300") 50%,
       var(--current-background-color) 0
     );
     background-position: right;
   }
 
   .anim-slide-bg.activated:not(.disabled) {
-    --current-background-color: theme("colors.red.100");
+    --current-background-color: theme("colors.amber.100");
     background-position: left;
-    @apply border-red-500
+    @apply border-amber-500;
   }
 
   .anim-slide-bg:not(.disabled):hover {
-    --current-background-color: theme("colors.red.100");
-    @apply border-red-500
+    --current-background-color: theme("colors.amber.100");
+    @apply border-amber-500;
   }
 }

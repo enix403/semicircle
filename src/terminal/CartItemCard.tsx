@@ -19,6 +19,7 @@ import {
 } from "types/quantification";
 import { CartItemEntry, useTerminalStore } from "./state/store";
 
+import { roundToMultipleDown, roundToMultipleUp } from "utils";
 import { numformat } from "./common";
 
 interface QuantityPickerProps {
@@ -45,7 +46,7 @@ const QuantityPicker = (props: QuantityPickerProps) => {
           <Input
             className='text-right'
             type='number'
-            min={1}
+            min={0}
             value={ccq.qty.majorUnits.toString()}
             onChange={e => {
               onChange?.({
@@ -53,6 +54,7 @@ const QuantityPicker = (props: QuantityPickerProps) => {
                 majorUnits: +e.target.value || 0
               });
             }}
+            onFocus={e => e.target.select()}
           />
           <InputRightAddon children={unitInfo.majorShortName} />
         </InputGroup>
@@ -61,7 +63,36 @@ const QuantityPicker = (props: QuantityPickerProps) => {
             <Input
               className='text-right'
               type='number'
-              defaultValue={ccq.qty.minorUnits}
+              min={1}
+              value={ccq.qty.minorUnits.toString()}
+              onChange={e => {
+                onChange?.({
+                  ...ccq.qty,
+                  minorUnits: +e.target.value || 0
+                });
+              }}
+              onFocus={e => e.target.select()}
+              onKeyDown={e => {
+                if (e.key == "ArrowUp") {
+                  onChange?.({
+                    ...ccq.qty,
+                    minorUnits: roundToMultipleUp(
+                      ccq.qty.minorUnits,
+                      unitInfo.naturalInterval
+                    )
+                  });
+                  e.preventDefault();
+                } else if (e.key == "ArrowDown") {
+                  onChange?.({
+                    ...ccq.qty,
+                    minorUnits: roundToMultipleDown(
+                      ccq.qty.minorUnits,
+                      unitInfo.naturalInterval
+                    )
+                  });
+                  e.preventDefault();
+                }
+              }}
             />
             <InputRightAddon children={unitInfo.minorShortName} />
           </InputGroup>
@@ -110,9 +141,16 @@ export const CartItemCard = React.memo(
       store => store.updateEntryQuantity
     );
 
+    const zeroQty = QuantityM.isZeroC(itemEntry.offQty.qty);
+
     return (
       <div
-        className='mt-4 flex h-16 items-center rounded-md border-2 border-blue-500 bg-white shadow-lg first:mt-0'
+        className={classNames(
+          "mt-4 flex h-16 items-center rounded-md border-2 bg-white shadow-lg transition-all first:mt-0 slide-in-blurred-top",
+          zeroQty
+            ? "border-4 border-red-500 shadow-2xl shadow-red-400"
+            : "border-blue-500"
+        )}
         title={item.name}
       >
         <div className='del-btn box-center aspect-square min-h-full cursor-pointer self-stretch bg-blue-500/20 text-blue-500 hover:bg-blue-500/30'>
@@ -124,7 +162,7 @@ export const CartItemCard = React.memo(
         <QuantityPicker
           qty={itemEntry.offQty}
           onChange={newQty => {
-            // updateEntryQuantity(itemEntry.offering.id, newQty);
+            updateEntryQuantity(itemEntry.offering, newQty);
           }}
         />
         <Subtotal qty={itemEntry.offQty} price={item.price} />

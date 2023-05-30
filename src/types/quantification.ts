@@ -73,10 +73,15 @@ export const QuantityM = ((<any>window).QuantityM = new (class {
     const divisions = Math.max(1, ccq.unitInfo.divisions);
 
     let deltaMajor = Math.floor(ccq.qty.minorUnits / divisions);
-    let minor = ccq.qty.minorUnits % divisions;
+    let minor = (divisions + ccq.qty.minorUnits) % divisions;
 
     ccq.qty.majorUnits += deltaMajor;
     ccq.qty.minorUnits = minor;
+
+    if (ccq.qty.majorUnits < 0) {
+      ccq.qty.majorUnits = 0;
+      ccq.qty.minorUnits = 0;
+    }
 
     return ccq;
   }

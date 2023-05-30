@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import classNames from 'classnames';
+import classNames from "classnames";
 
 export const FlexGrow = React.memo((props: React.HTMLProps<HTMLDivElement>) => {
   return (

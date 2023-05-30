@@ -6,7 +6,8 @@ import { createStore } from "zustand/vanilla";
 import { Item } from "types/protos-ts/offerings_pb";
 import {
   CompleteCompositeQuantity,
-  CompositeQuantity
+  CompositeQuantity,
+  QuantityM
 } from "types/quantification";
 
 import * as actions from "./actions";
@@ -26,9 +27,9 @@ export type CartItemEntry = CartEntry<Item, CompleteCompositeQuantity>;
 export interface TerminalState {
   offerings: Offerings;
   cart: {
-    items: CartItemEntry[],
+    items: CartItemEntry[];
     // services: CartServiceEntry[],
-  }
+  };
 }
 
 export type StoreSetCallback = (store: TerminalStore) => void;
@@ -36,10 +37,14 @@ export type StoreSetter = (callback: StoreSetCallback) => void;
 
 export interface TerminalActions {
   updateOfferings: (updated: TerminalState["offerings"]) => void;
-  addToCart: (item: Item) => void;
   clearCart: () => void;
+  addToCart: (item: Item) => void;
 
-  updateEntryQuantity: (item: Item, newQty: CompositeQuantity) => void;
+  updateEntryQuantity: (
+    item: Item,
+    newQty: CompositeQuantity,
+    removeIfZero?: boolean
+  ) => void;
 
   //
   mutate: (callback: StoreSetCallback) => void;
@@ -60,7 +65,7 @@ export const terminalStore = createStore<
           // allServices: []
         },
         cart: {
-          items: [],
+          items: []
           // services: []
         },
 
@@ -81,10 +86,20 @@ export const terminalStore = createStore<
           });
         },
         addToCart: off => actions.addToCart(off, set),
-        updateEntryQuantity: (item: Item, newQty) =>
+        updateEntryQuantity: (item, newQty, removeIfZero) =>
           set(store => {
-            let target = store.cart.items.find(ent => ent.offering.id == item.id);
-            if (target) target.offQty.qty = newQty;
+            let targetIndex = store.cart.items.findIndex(
+              ent => ent.offering.id == item.id
+            );
+            if (targetIndex !== -1) {
+              let target = store.cart.items[targetIndex];
+              target.offQty.qty = newQty;
+              QuantityM.simplifyC(target.offQty);
+              if (removeIfZero && QuantityM.isZeroC(target.offQty.qty)) {
+                // remove from cart altogether
+                store.cart.items.splice(targetIndex, 1);
+              }
+            }
           })
       }),
       { name: "pos-terminal-store" }

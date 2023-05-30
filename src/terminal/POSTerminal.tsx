@@ -44,7 +44,7 @@ function OfferingsPane(): ReactElement {
 }
 
 function CartPane() {
-  const {items} = useTerminalStore(store => store.cart);
+  const { items } = useTerminalStore(store => store.cart);
   return (
     <div className='flex-1 overflow-y-auto border-2 border-l-zinc-300 bg-slate-100 p-5'>
       {items.map(entry => (

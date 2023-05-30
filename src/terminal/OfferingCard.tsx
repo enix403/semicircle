@@ -64,6 +64,9 @@ interface OfferingCardProps {
 }
 export const OfferingCard = (props: OfferingCardProps): ReactElement => {
   const addToCart = useTerminalStore(store => store.addToCart);
+  const updateEntryQuantity = useTerminalStore(
+    store => store.updateEntryQuantity
+  );
   const { item } = props;
 
   const unitInfo = React.useMemo(() => UnitInfoM.fromCode(item.unitCode), []);
@@ -115,7 +118,7 @@ export const OfferingCard = (props: OfferingCardProps): ReactElement => {
           <p className='nt text-lg  font-medium'>{item.name}</p>
           <p className='price nt text-sm text-slate-600'>
             <span className='alt-font-1'>{item.price}/</span>
-            <span>kg</span>
+            <span>{unitInfo.majorShortName}</span>
           </p>
           {outOfStock && (
             <p className='mt-4 text-base font-medium text-red-700'>
@@ -133,6 +136,16 @@ export const OfferingCard = (props: OfferingCardProps): ReactElement => {
           <ProductCounter
             onIncrement={() => {
               addToCart(item);
+            }}
+            onDecrement={() => {
+              updateEntryQuantity(
+                item,
+                {
+                  ...cartOffQty,
+                  majorUnits: cartOffQty.majorUnits - 1
+                },
+                true
+              );
             }}
             value={qtyRendered}
           />
