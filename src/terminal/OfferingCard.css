@@ -9,20 +9,20 @@
 
     background-image: linear-gradient(
       to right,
-      theme("colors.amber.300") 50%,
+      theme("colors.emerald.300") 50%,
       var(--current-background-color) 0
     );
     background-position: right;
   }
 
   .anim-slide-bg.activated:not(.disabled) {
-    --current-background-color: theme("colors.amber.100");
+    --current-background-color: theme("colors.emerald.100");
     background-position: left;
-    @apply border-amber-500;
+    @apply border-emerald-500;
   }
 
   .anim-slide-bg:not(.disabled):hover {
-    --current-background-color: theme("colors.amber.100");
-    @apply border-amber-500;
+    --current-background-color: theme("colors.emerald.100");
+    @apply border-emerald-500;
   }
 }

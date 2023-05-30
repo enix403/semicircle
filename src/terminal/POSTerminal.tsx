@@ -4,9 +4,13 @@ import { CartEntry, useTerminalStore } from "./state/store";
 
 import { callProtoService } from "repositories";
 
-import { Item, QueryItems } from "types/protos-ts/offerings_pb";
+import { QueryItems } from "types/protos-ts/offerings_pb";
 import { CartItemCard } from "./CartItemCard";
 import "./terminal-global.css";
+
+import { QuantityM, UnitInfoM } from 'types/quantification';
+
+import { numformat } from "./common";
 
 function makeGroups<T>(list: T[], len: number): T[][] {
   let result: T[][] = [];
@@ -46,10 +50,46 @@ function OfferingsPane(): ReactElement {
 function CartPane() {
   const { items } = useTerminalStore(store => store.cart);
   return (
-    <div className='flex-1 overflow-y-auto border-2 border-l-zinc-300 bg-slate-100 p-5'>
+    <div className='flex-1 overflow-y-auto p-5'>
       {items.map(entry => (
         <CartItemCard key={entry.offering.id} itemEntry={entry} />
       ))}
+    </div>
+  );
+}
+
+interface StatBlockProps {
+  name: string;
+  value: string | number;
+}
+function StatBlock(props: StatBlockProps) {
+  return (
+    <div className='mx-2 inline-block'>
+      <p className='text-center text-sm font-bold uppercase'>{props.name}</p>
+      <p className='alt-font-1 mt-1 text-right text-2xl font-medium underline underline-offset-4 text-yellow-400'>
+        {props.value}
+      </p>
+    </div>
+  );
+}
+
+function Stats() {
+  const items = useTerminalStore(store => store.cart.items);
+
+  const totalBill = items.reduce((total, item) => {
+    let qtyValue = QuantityM.numericValueC(item.offQty);
+    let subtotal = item.offering.price * qtyValue;
+    return total + subtotal;
+  }, 0);
+
+  return (
+    <div className='flex h-24 rounded-xl rounded-t-none bg-cyan-800 px-2 py-4 text-white shadow-md shadow-cyan-900'>
+      <div className="flex-1 box-center">
+        <StatBlock name="Item Count" value={items.length} />
+      </div>
+      <div className="flex-1 box-center">
+        <StatBlock name="Total Bill" value={numformat(totalBill)} />
+      </div>
     </div>
   );
 }
@@ -74,9 +114,9 @@ export function POSTerminal(): ReactElement {
       });
 
       clearCart();
-      addToCart(result.items[3]);
-      addToCart(result.items[6]);
-      addToCart(result.items[2]);
+      // addToCart(result.items[3]);
+      // addToCart(result.items[6]);
+      // addToCart(result.items[2]);
     })();
   }, []);
 
@@ -84,7 +124,10 @@ export function POSTerminal(): ReactElement {
     <>
       <div className='flex h-full max-h-full overflow-hidden'>
         <OfferingsPane />
-        <CartPane />
+        <div className='flex flex-1 flex-col border-l-2 border-zinc-300 bg-slate-100'>
+          <Stats />
+          <CartPane />
+        </div>
       </div>
     </>
   );
