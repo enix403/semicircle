@@ -8,7 +8,6 @@ import {
   AlertDialogOverlay,
   Button,
   useDisclosure,
-  UseDisclosureReturn
 } from "@chakra-ui/react";
 import { Snowflake } from "@phosphor-icons/react";
 import { ReactElement, useEffect, useRef } from "react";
@@ -18,52 +17,31 @@ import { callProtoService } from "repositories";
 import { QueryItems } from "types/protos-ts/offerings_pb";
 import { QuantityM } from "types/quantification";
 import { CartItemCard } from "./CartItemCard";
-import { numformat } from "./common";
 import { OfferingCard } from "./OfferingCard";
+import { numformat } from "./common";
 import { useTerminalStore } from "./state/store";
 
 import "./terminal-global.css";
 
-function makeGroups<T>(list: T[], len: number): T[][] {
-  let result: T[][] = [];
-
-  let current: T[] = [];
-
-  let c;
-  for (let i = 0, c = 0; i < list.length; ++i, ++c) {
-    if (c == len) {
-      c = 0;
-      result.push(current);
-      current = [];
-    }
-    current.push(list[i]);
-  }
-  if (c != len) result.push(current);
-
-  return result;
-}
-
-function OfferingsPane(): ReactElement {
+function OfferingsPane(): ReactElement | null {
   const { allItems } = useTerminalStore(store => store.offerings);
 
   return (
-    <div className='h-full overflow-y-auto p-4'>
-      {makeGroups(allItems, 5).map((itemsRow, index) => (
-        <div className='flex flex-row' key={index}>
-          {itemsRow.map(item => (
-            <OfferingCard key={item.id} item={item} />
-          ))}
+    <div className='flex h-full flex-wrap content-start overflow-y-auto p-4'>
+      {allItems.map(item => (
+        <div className='pt-2 h-40 w-1/5 px-2' key={item.id}>
+          <OfferingCard item={item} />
         </div>
       ))}
     </div>
   );
 }
 
-interface ClearCartConfirmationProps {
+interface ClearCartProps {
   onConfirm: () => void;
   itemCount: number;
 }
-function ClearCartConfirmation({ onConfirm, itemCount }: ClearCartConfirmationProps) {
+function ClearCart({ onConfirm, itemCount }: ClearCartProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef<any>();
 
@@ -72,20 +50,14 @@ function ClearCartConfirmation({ onConfirm, itemCount }: ClearCartConfirmationPr
       <Button onClick={onOpen} className='float-right' colorScheme='red'>
         Clear
       </Button>
-      <AlertDialog
-        // motionPreset='slideInBottom'
-        leastDestructiveRef={cancelRef}
-        onClose={onClose}
-        isOpen={isOpen}
-        isCentered
-      >
+      <AlertDialog leastDestructiveRef={cancelRef} onClose={onClose} isOpen={isOpen} isCentered>
         <AlertDialogOverlay />
 
         <AlertDialogContent>
           <AlertDialogHeader>Clear Cart?</AlertDialogHeader>
           <AlertDialogCloseButton />
           <AlertDialogBody>
-            Are you sure you want to remove all items from the current cart.{' '}
+            Are you sure you want to remove all items from the current cart.{" "}
             <strong>{itemCount}</strong> item(s) will be removed.
           </AlertDialogBody>
           <AlertDialogFooter>
@@ -112,7 +84,7 @@ function CartPane() {
     <>
       {itemCount != 0 && (
         <div className='px-4 py-2'>
-          <ClearCartConfirmation itemCount={itemCount} onConfirm={() => clearCart()} />
+          <ClearCart itemCount={itemCount} onConfirm={() => clearCart()} />
         </div>
       )}
       <div className='flex-1 overflow-y-auto p-5 pt-2'>

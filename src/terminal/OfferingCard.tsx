@@ -91,7 +91,7 @@ export const OfferingCard = (props: OfferingCardProps): ReactElement => {
   return (
     <div
       className={classNames(
-        "m-2 mb-0 h-40 grow overflow-hidden rounded-md border-2 border-gray-400",
+        "h-full rounded-md border-2 border-gray-400",
         "anim-slide-bg",
         active && "activated [&_.price]:text-slate-950",
         outOfStock
