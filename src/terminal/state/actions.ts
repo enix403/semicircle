@@ -1,11 +1,6 @@
 // import { AnyOffering, makeAnyOfferingId } from "types";
 import { Item } from "types/protos-ts/offerings_pb";
-import {
-  CompositeQuantity,
-  QuantityM,
-  UnitInfo,
-  UnitInfoM
-} from "types/quantification";
+import { CompositeQuantity, QuantityM, UnitInfo, UnitInfoM } from "types/quantification";
 import { assertUnreachable } from "utils";
 import type { CartEntry, CartItemEntry, StoreSetter } from "./store";
 
@@ -34,6 +29,27 @@ export function addToCart(item: Item, set: StoreSetter) {
     cart.items.push(newCartItem);
   });
 }
+
+export function updateEntryQuantity(
+  item: Item,
+  newQty: CompositeQuantity,
+  removeIfZero: boolean,
+  set: StoreSetter
+) {
+  set(({ cart }) => {
+    let targetIndex = cart.items.findIndex(ent => ent.offering.id == item.id);
+    if (targetIndex !== -1) {
+      let target = cart.items[targetIndex];
+      target.offQty.qty = newQty;
+      QuantityM.simplifyC(target.offQty);
+      if (removeIfZero && QuantityM.isZeroC(target.offQty.qty)) {
+        // remove from cart altogether
+        cart.items.splice(targetIndex, 1);
+      }
+    }
+  });
+}
+
 /*
 export function deleteFromCart(offId: string, set: StoreSetter) {
   set(store => {

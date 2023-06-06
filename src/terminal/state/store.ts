@@ -4,11 +4,7 @@ import { immer } from "zustand/middleware/immer";
 import { createStore } from "zustand/vanilla";
 
 import { Item } from "types/protos-ts/offerings_pb";
-import {
-  CompleteCompositeQuantity,
-  CompositeQuantity,
-  QuantityM
-} from "types/quantification";
+import { CompleteCompositeQuantity, CompositeQuantity, QuantityM } from "types/quantification";
 
 import * as actions from "./actions";
 
@@ -40,11 +36,9 @@ export interface TerminalActions {
   clearCart: () => void;
   addToCart: (item: Item) => void;
 
-  updateEntryQuantity: (
-    item: Item,
-    newQty: CompositeQuantity,
-    removeIfZero?: boolean
-  ) => void;
+  updateEntryQuantity: (item: Item, newQty: CompositeQuantity, removeIfZero?: boolean) => void;
+
+  removeEntry: (item: Item) => void;
 
   //
   mutate: (callback: StoreSetCallback) => void;
@@ -85,22 +79,13 @@ export const terminalStore = createStore<
             store.cart.items = [];
           });
         },
+
         addToCart: off => actions.addToCart(off, set),
+
         updateEntryQuantity: (item, newQty, removeIfZero) =>
-          set(store => {
-            let targetIndex = store.cart.items.findIndex(
-              ent => ent.offering.id == item.id
-            );
-            if (targetIndex !== -1) {
-              let target = store.cart.items[targetIndex];
-              target.offQty.qty = newQty;
-              QuantityM.simplifyC(target.offQty);
-              if (removeIfZero && QuantityM.isZeroC(target.offQty.qty)) {
-                // remove from cart altogether
-                store.cart.items.splice(targetIndex, 1);
-              }
-            }
-          })
+          actions.updateEntryQuantity(item, newQty, removeIfZero || false, set),
+
+        removeEntry: item => actions.updateEntryQuantity(item, QuantityM.zeroC, true, set)
       }),
       { name: "pos-terminal-store" }
     )

@@ -10,9 +10,7 @@ const serviceToPathMap = new Map<MessageType<any>, string>();
 }
 
 type ProtoServiceAnswer<T> = T extends { SQRet?: infer R } ? R : any;
-type ProtoServicePayload<T> = Parameters<
-  MessageType<Omit<T, "SQRet">>["create"]
->[0];
+type ProtoServicePayload<T> = Parameters<MessageType<Omit<T, "SQRet">>["create"]>[0];
 
 export async function callProtoService<T extends object>(
   $ty: MessageType<T>,

@@ -5,7 +5,7 @@ import { useTerminalStore } from "./state/store";
 import { callProtoService } from "repositories";
 
 import { QueryItems } from "types/protos-ts/offerings_pb";
-import { QuantityM } from 'types/quantification';
+import { QuantityM } from "types/quantification";
 import { CartItemCard } from "./CartItemCard";
 import "./terminal-global.css";
 
@@ -36,7 +36,7 @@ function OfferingsPane(): ReactElement {
   const { allItems } = useTerminalStore(store => store.offerings);
 
   return (
-    <div className='flex-[1.5] overflow-y-auto p-4'>
+    <div className='overflow-y-auto p-4'>
       {makeGroups(allItems, 5).map((itemsRow, index) => (
         <div className='flex flex-row' key={index}>
           {itemsRow.map(item => (
@@ -51,17 +51,19 @@ function OfferingsPane(): ReactElement {
 function CartPane() {
   const { items } = useTerminalStore(store => store.cart);
   return (
-    <div className='flex-1 overflow-y-auto p-5'>
+    <>
+      {/* <div className='flex-1 overflow-y-auto p-5'> */}
       {items.map(entry => (
         <CartItemCard key={entry.offering.id} itemEntry={entry} />
       ))}
       {items.length == 0 && (
-        <div className="m-2 box-center h-full flex-col">
-          <Snowflake weight='light' size="16rem" />
-          <p className="text-base pb-10">No items added</p>
+        <div className='box-center m-2 h-full flex-col'>
+          <Snowflake weight='light' size='16rem' />
+          <p className='pb-10 text-base'>No items added</p>
         </div>
       )}
-    </div>
+      {/* </div> */}
+    </>
   );
 }
 
@@ -90,12 +92,12 @@ function Stats() {
   }, 0);
 
   return (
-    <div className='flex h-24 rounded-xl rounded-t-none bg-cyan-800 px-2 py-4 text-white shadow-md shadow-cyan-900'>
-      <div className="flex-1 box-center">
-        <StatBlock name="Item Count" value={items.length} />
+    <div className='flex h-24 border-t-2 border-zinc-300 bg-cyan-800 px-2 py-4 text-white'>
+      <div className='box-center flex-1'>
+        <StatBlock name='Item Count' value={items.length} />
       </div>
-      <div className="flex-1 box-center">
-        <StatBlock name="Total Bill" value={numformat(totalBill)} />
+      <div className='box-center flex-1'>
+        <StatBlock name='Total Bill' value={numformat(totalBill)} />
       </div>
     </div>
   );
@@ -127,9 +129,11 @@ export function POSTerminal(): ReactElement {
   return (
     <>
       <div className='flex h-full max-h-full overflow-hidden'>
-        <OfferingsPane />
-        <div className='flex flex-1 flex-col border-l-2 border-zinc-300 bg-slate-100'>
+        <div className='flex flex-[1.5] flex-col'>
+          <OfferingsPane />
           <Stats />
+        </div>
+        <div className='flex-1 flex-col overflow-y-auto border-l-2 border-zinc-300 bg-slate-100 p-5'>
           <CartPane />
         </div>
       </div>

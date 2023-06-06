@@ -59,6 +59,10 @@ export type CompleteWholeQuantity = CompleteQuantity<WholeQuantity>;
 export type CompleteCompositeQuantity = CompleteQuantity<CompositeQuantity>;
 
 export const QuantityM = ((<any>window).QuantityM = new (class {
+  get zeroC() {
+    return this.createC();
+  }
+
   createC = (major: number = 0): CompositeQuantity => ({
     containers: 1,
     majorUnits: major,
@@ -114,8 +118,7 @@ export const QuantityM = ((<any>window).QuantityM = new (class {
   convertCTW(ccq: CompleteCompositeQuantity): CompleteWholeQuantity {
     const { qty, unitInfo } = ccq;
 
-    let withoutContainers =
-      qty.majorUnits * Math.max(unitInfo.divisions, 1) + qty.minorUnits;
+    let withoutContainers = qty.majorUnits * Math.max(unitInfo.divisions, 1) + qty.minorUnits;
     let total = withoutContainers * qty.containers;
 
     return {
@@ -143,9 +146,7 @@ export const QuantityM = ((<any>window).QuantityM = new (class {
 
   compareC = (a: CompositeQuantity, b: CompositeQuantity): boolean => {
     return (
-      a.containers == b.containers &&
-      a.majorUnits == b.majorUnits &&
-      a.minorUnits == b.minorUnits
+      a.containers == b.containers && a.majorUnits == b.majorUnits && a.minorUnits == b.minorUnits
     );
   };
 
@@ -153,8 +154,7 @@ export const QuantityM = ((<any>window).QuantityM = new (class {
     let { qty, unitInfo } = ccq;
     let total = qty.majorUnits;
 
-    if (!UnitInfoM.isCountable(unitInfo))
-      total += qty.minorUnits / unitInfo.divisions;
+    if (!UnitInfoM.isCountable(unitInfo)) total += qty.minorUnits / unitInfo.divisions;
 
     return total * qty.containers;
   }

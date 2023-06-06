@@ -13,9 +13,7 @@ import { numformat } from "./common";
 import "./OfferingCard.css";
 import { useTerminalStore } from "./state/store";
 
-const CounterIconButton = (
-  props: { iconComp: Icon } & React.HTMLProps<HTMLDivElement>
-) => {
+const CounterIconButton = (props: { iconComp: Icon } & React.HTMLProps<HTMLDivElement>) => {
   const { iconComp: IconComp, ...rest } = props;
   return (
     <div
@@ -64,20 +62,17 @@ interface OfferingCardProps {
 }
 export const OfferingCard = (props: OfferingCardProps): ReactElement => {
   const addToCart = useTerminalStore(store => store.addToCart);
-  const updateEntryQuantity = useTerminalStore(
-    store => store.updateEntryQuantity
-  );
+  const updateEntryQuantity = useTerminalStore(store => store.updateEntryQuantity);
   const { item } = props;
 
   const unitInfo = React.useMemo(() => UnitInfoM.fromCode(item.unitCode), []);
-  const unitInfoCountable = React.useMemo(
-    () => UnitInfoM.isCountable(unitInfo),
-    []
-  );
+  const unitInfoCountable = React.useMemo(() => UnitInfoM.isCountable(unitInfo), []);
 
   const cartOffQty: CompositeQuantity = useTerminalStore(store => {
     let cartItem = store.cart.items.find(ent => ent.offering.id === item.id);
-    if (!cartItem) return zeroQuanityC;
+    if (!cartItem)
+      //
+      return zeroQuanityC;
     return cartItem.offQty.qty;
   }, QuantityM.compareC);
 
@@ -91,9 +86,7 @@ export const OfferingCard = (props: OfferingCardProps): ReactElement => {
     unitInfo,
     qty: cartOffQty
   });
-  let qtyRendered = unitInfoCountable
-    ? qtyValue.toString()
-    : numformat(qtyValue);
+  let qtyRendered = unitInfoCountable ? qtyValue.toString() : numformat(qtyValue);
 
   return (
     <div
@@ -110,25 +103,16 @@ export const OfferingCard = (props: OfferingCardProps): ReactElement => {
         e.stopPropagation();
       }}
     >
-      <div
-        className='table h-full w-full table-fixed border-collapse'
-        title={item.name}
-      >
+      <div className='table h-full w-full table-fixed border-collapse' title={item.name}>
         <div className='table-cell px-4 py-2 align-top'>
           <p className='nt text-lg  font-medium'>{item.name}</p>
           <p className='price nt text-sm text-slate-600'>
             <span className='alt-font-1'>{item.price}/</span>
             <span>{unitInfo.majorShortName}</span>
           </p>
-          {outOfStock && (
-            <p className='mt-4 text-base font-medium text-red-700'>
-              Out of Stock
-            </p>
-          )}
+          {outOfStock && <p className='mt-4 text-base font-medium text-red-700'>Out of Stock</p>}
           {maxCapacityReached && (
-            <p className='mt-4 text-base font-medium text-orange-800'>
-              No more items left
-            </p>
+            <p className='mt-4 text-base font-medium text-orange-800'>No more items left</p>
           )}
         </div>
 
