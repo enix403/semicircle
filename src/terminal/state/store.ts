@@ -72,6 +72,7 @@ export const terminalStore = createStore<
           set((state: TerminalStore) => {
             state.offerings.allItems = updated.allItems;
             // state.offerings.allServices = offering.allServices;
+            state.cart.items = []; // clear cart too
           }),
 
         clearCart: () => {
