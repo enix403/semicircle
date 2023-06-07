@@ -1,44 +1,52 @@
-import AutoSizer, { Size } from "react-virtualized-auto-sizer";
-import { FixedSizeGrid } from "react-window";
-
+import React from "react";
 import { OfferingCard } from "./OfferingCard";
 import { useTerminalStore } from "./state/store";
 
-export function OfferingsPane() {
+const PAGE_SIZE = 25;
+
+const PaginationButton = (props: React.PropsWithChildren<{ onClick: () => void }>) => (
+  <div
+    onClick={props.onClick}
+    className='inline-flex h-full w-1/2 items-center justify-center bg-orange-600 transition-colors hover:bg-orange-800'
+  >
+    {props.children}
+  </div>
+);
+
+export const OfferingsPane = React.memo(() => {
   const { allItems } = useTerminalStore(store => store.offerings);
+  const [page, setPage] = React.useState(0);
+
+  let base = Math.max(0, page) * PAGE_SIZE;
+  let last = Math.ceil(allItems.length / PAGE_SIZE) - 1;
+  const slicedItems = allItems.slice(base, base + PAGE_SIZE);
+
+  const deltaPage = React.useCallback((delta: number) => {
+    setPage(p => clamp(0, last, p + delta));
+  }, [last]);
 
   return (
-    <div className='h-full py-4'>
-      <AutoSizer>
-        {(size: Size) => {
-          let COLUMNS = 5;
-          if (size.width <= 940) COLUMNS = 4;
-
-          const ROWS = Math.ceil(allItems.length / COLUMNS);
-
-          const getItem = (row: number, column: number) => allItems[row * COLUMNS + column];
-
-          return (
-            <FixedSizeGrid
-              columnCount={COLUMNS}
-              columnWidth={size.width / COLUMNS}
-              rowCount={ROWS}
-              rowHeight={160}
-              height={size.height}
-              width={size.width}
-              itemKey={({ columnIndex, rowIndex }) => getItem(rowIndex, columnIndex).id}
-              overscanRowCount={4}
-              className='override-pointer-events'
-            >
-              {({ columnIndex, rowIndex, style }) => (
-                <div className='px-2 pt-2' style={style}>
-                  <OfferingCard item={getItem(rowIndex, columnIndex)} />
-                </div>
-              )}
-            </FixedSizeGrid>
-          );
-        }}
-      </AutoSizer>
-    </div>
+    <>
+      <div className='flex h-full flex-wrap content-start overflow-y-auto p-4'>
+        {slicedItems.map(item => (
+          <div key={item.id} className='h-40 w-1/3 px-2 pt-2 md:w-1/4 lg:w-1/5'>
+            <OfferingCard item={item} />
+          </div>
+        ))}
+      </div>
+      <div className='h-12 cursor-pointer text-3xl font-bold text-white'>
+        <PaginationButton onClick={() => deltaPage(-1)}>&lt;</PaginationButton>
+        <PaginationButton onClick={() => deltaPage(+1)}>&gt;</PaginationButton>
+      </div>
+    </>
   );
+});
+
+function clamp(min: number, max: number, value: number): number {
+  if (value < min)
+    return min;
+  if (value > max)
+    return max;
+
+  return value;
 }

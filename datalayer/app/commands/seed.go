@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"math"
 	// c "semicircle/web/app/common"
 	m "semicircle/web/app/models"
 
@@ -17,8 +18,8 @@ func SeedDatabase(db *gorm.DB) {
 
 func addItems(db *gorm.DB) {
 	fracCount := 0
-	for i := 0; i < 500; i += 1 {
-		price := float64(115 * i + 70)
+	for i := 0; i < 1200; i += 1 {
+		price := float64(115 * int(math.Min(20, float64(i))) + 4000/(i+1) + i + 20)
 		name := fmt.Sprintf("PC Item %d", i + 1)
 
 		var unitCode string
