@@ -156,7 +156,12 @@ function Stats() {
       <StatBlock name='Item Count' value={items.length} />
       <StatBlock name='Total Bill' value={numformat(totalBill)} />
       <FlexGrow />
-      <div className='box-center ml-4 cursor-pointer rounded-md border-2 border-green-300 px-3 font-semibold text-green-300 hover:bg-green-300/10'>
+      <div
+        className='
+          box-center ml-4 cursor-pointer rounded-md border-2 border-green-300 px-3
+          font-semibold text-green-300 hover:bg-green-300/80 hover:text-black
+        '
+      >
         Checkout
       </div>
     </div>
