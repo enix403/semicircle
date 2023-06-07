@@ -10,3 +10,14 @@
 .override-pointer-events > div[style] {
   pointer-events: auto !important;
 }
+
+.anim-stat-block {
+  transition: max-height 1s ease-out 1s;
+  z-index: 500;
+  height: 1000px;
+  max-height: 100px;
+}
+
+.anim-stat-block.expanded {
+  max-height: 800px;
+}
