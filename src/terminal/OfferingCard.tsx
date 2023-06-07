@@ -18,7 +18,7 @@ const CounterIconButton = (props: { iconComp: Icon } & React.HTMLProps<HTMLDivEl
   return (
     <div
       {...rest}
-      className='flex aspect-square w-8 items-center justify-center rounded-full border border-gray-800 hover:bg-gray-800/10'
+      className='flex aspect-square w-10 items-center justify-center rounded-full border border-gray-800 hover:bg-gray-800/10'
     >
       <IconComp weight='regular' size='1.22rem' />
     </div>
@@ -33,7 +33,7 @@ interface ProductCounterProps {
 const ProductCounter = (props: ProductCounterProps): ReactElement => {
   const { value } = props;
   return (
-    <div className='flex h-full flex-col items-end pb-3 pr-3 pt-8'>
+    <div className='flex h-full flex-col items-end pb-3 pr-3 pt-3'>
       <CounterIconButton
         iconComp={Plus}
         onClick={e => {

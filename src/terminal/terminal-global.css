@@ -6,3 +6,7 @@
   /* font-family: "Ubuntu Mono", sans-serif; */
   font-family: "Fira Code", sans-serif;
 }
+
+.override-pointer-events > div[style] {
+  pointer-events: auto !important;
+}

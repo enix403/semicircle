@@ -7,10 +7,12 @@ import {
   AlertDialogHeader,
   AlertDialogOverlay,
   Button,
-  useDisclosure,
+  useDisclosure
 } from "@chakra-ui/react";
 import { Snowflake } from "@phosphor-icons/react";
 import { ReactElement, useEffect, useRef } from "react";
+import AutoSizer, { Size } from "react-virtualized-auto-sizer";
+import { FixedSizeGrid } from "react-window";
 
 import { FlexGrow } from "components/FlexGrow/FlexGrow";
 import { callProtoService } from "repositories";
@@ -27,12 +29,37 @@ function OfferingsPane(): ReactElement | null {
   const { allItems } = useTerminalStore(store => store.offerings);
 
   return (
-    <div className='flex h-full flex-wrap content-start overflow-y-auto p-4'>
-      {allItems.map(item => (
-        <div className='pt-2 h-40 w-1/5 px-2' key={item.id}>
-          <OfferingCard item={item} />
-        </div>
-      ))}
+    <div className='h-full py-4'>
+      <AutoSizer>
+        {(size: Size) => {
+          let COLUMNS = 5;
+          if (size.width <= 940) COLUMNS = 4;
+
+          const ROWS = Math.ceil(allItems.length / COLUMNS);
+
+          const getItem = (row: number, column: number) => allItems[row * COLUMNS + column];
+
+          return (
+            <FixedSizeGrid
+              columnCount={COLUMNS}
+              columnWidth={size.width / COLUMNS}
+              rowCount={ROWS}
+              rowHeight={160}
+              height={size.height}
+              width={size.width}
+              itemKey={({ columnIndex, rowIndex }) => getItem(rowIndex, columnIndex).id}
+              overscanRowCount={4}
+              className='override-pointer-events'
+            >
+              {({ columnIndex, rowIndex, style }) => (
+                <div className='px-2 pt-2' style={style}>
+                  <OfferingCard item={getItem(rowIndex, columnIndex)} />
+                </div>
+              )}
+            </FixedSizeGrid>
+          );
+        }}
+      </AutoSizer>
     </div>
   );
 }
