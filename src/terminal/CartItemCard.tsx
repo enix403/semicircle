@@ -4,6 +4,7 @@ import React from "react";
 import { Button, Input, InputGroup, InputRightAddon, Stack } from "@chakra-ui/react";
 import { Eye } from "@phosphor-icons/react";
 
+import { FlexGrow } from "components/FlexGrow/FlexGrow";
 import {
   CompleteCompositeQuantity,
   CompositeQuantity,
@@ -11,10 +12,9 @@ import {
   UnitInfoM
 } from "types/quantification";
 import { roundToMultipleDown, roundToMultipleUp } from "utils";
-import { numformat } from "./common";
+import { useSubtotal } from "./common";
 import { CartItemEntry, useTerminalStore } from "./state/store";
 
-import { FlexGrow } from "components/FlexGrow/FlexGrow";
 import "./CartItemCard.css";
 
 interface QuantityPickerProps {
@@ -23,7 +23,6 @@ interface QuantityPickerProps {
 }
 const QuantityPicker = (props: QuantityPickerProps) => {
   const { qty: ccq, onChange } = props;
-  // console.log("QuantityPicker", ccq.qty.majorUnits)
   let unitInfo = ccq.unitInfo;
   let fractional = !UnitInfoM.isCountable(unitInfo);
 
@@ -91,10 +90,7 @@ interface SubtotalProps {
   price: number;
 }
 const Subtotal = ({ qty: ccq, price }: SubtotalProps) => {
-  let qtyValue = QuantityM.numericValueC(ccq);
-  let subtotal = qtyValue * price;
-
-  let qtyRendered = UnitInfoM.isCountable(ccq.unitInfo) ? qtyValue.toString() : numformat(qtyValue);
+  const { subtotal, qty: qtyRendered } = useSubtotal(ccq, price);
 
   return (
     <div className='alt-font-1 mr-3 w-36 flex-shrink-0 border-l-2 border-gray-200 text-right text-sm font-medium'>
@@ -106,7 +102,7 @@ const Subtotal = ({ qty: ccq, price }: SubtotalProps) => {
         </span>
       </p>
       <p>
-        = <span className='text-lg text-yellow-600'>{numformat(subtotal)}</span>
+        = <span className='text-lg text-yellow-600'>{subtotal}</span>
       </p>
     </div>
   );

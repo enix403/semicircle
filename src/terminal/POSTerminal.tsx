@@ -1,10 +1,11 @@
-import { ReactElement, useEffect, useRef } from "react";
+import { ReactElement, useEffect } from "react";
 
 import { FlexGrow } from "components/FlexGrow/FlexGrow";
 import { callProtoService } from "repositories";
 import { QueryItems } from "types/protos-ts/offerings_pb";
 import { QuantityM } from "types/quantification";
 import { CartView } from './CartView';
+import { CheckoutTable } from "./CheckoutTable";
 import { OfferingsPane } from './OfferingsPane';
 import { numformat } from "./common";
 import { useTerminalStore } from "./state/store";
@@ -79,6 +80,7 @@ export function POSTerminal(): ReactElement {
         </div>
         <div className='flex flex-1 flex-col border-l-2 border-zinc-300 bg-slate-100'>
           <CartView />
+          {/* <CheckoutTable /> */}
         </div>
       </div>
     </>

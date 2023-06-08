@@ -1,17 +1,14 @@
-import { Icon, Minus, Plus, SelectionForeground } from "@phosphor-icons/react";
 import classNames from "classnames";
-import React, { ReactElement } from "react";
+import React from "react";
+
+import { Icon, Minus, Plus } from "@phosphor-icons/react";
+
 import { Item } from "types/protos-ts/offerings_pb";
-import {
-  CompleteCompositeQuantity,
-  CompositeQuantity,
-  QuantityM,
-  UnitInfoM
-} from "types/quantification";
+import { CompositeQuantity, QuantityM, UnitInfoM } from "types/quantification";
 import { numformat } from "./common";
+import { useTerminalStore } from "./state/store";
 
 import "./OfferingCard.css";
-import { useTerminalStore } from "./state/store";
 
 const CounterIconButton = (props: { iconComp: Icon } & React.HTMLProps<HTMLDivElement>) => {
   const { iconComp: IconComp, ...rest } = props;
@@ -30,7 +27,7 @@ interface ProductCounterProps {
   onIncrement?: () => void;
   onDecrement?: () => void;
 }
-const ProductCounter = (props: ProductCounterProps): ReactElement => {
+const ProductCounter = (props: ProductCounterProps) => {
   const { value } = props;
   return (
     <div className='flex h-full flex-col items-end pb-3 pr-3 pt-3'>
@@ -60,13 +57,12 @@ interface OfferingCardProps {
   activated?: boolean;
   item: Item;
 }
-export const OfferingCard = (props: OfferingCardProps): ReactElement => {
+export const OfferingCard = (props: OfferingCardProps) => {
   const addToCart = useTerminalStore(store => store.addToCart);
   const updateEntryQuantity = useTerminalStore(store => store.updateEntryQuantity);
   const { item } = props;
 
   const unitInfo = React.useMemo(() => UnitInfoM.fromCode(item.unitCode), []);
-  const unitInfoCountable = React.useMemo(() => UnitInfoM.isCountable(unitInfo), []);
 
   const cartOffQty: CompositeQuantity = useTerminalStore(store => {
     let cartItem = store.cart.items.find(ent => ent.offering.id === item.id);
@@ -76,7 +72,6 @@ export const OfferingCard = (props: OfferingCardProps): ReactElement => {
     return cartItem.offQty.qty;
   }, QuantityM.compareC);
 
-  let active = !QuantityM.isZeroC(cartOffQty);
   let outOfStock = false;
   let maxCapacityReached = false;
 
@@ -86,7 +81,8 @@ export const OfferingCard = (props: OfferingCardProps): ReactElement => {
     unitInfo,
     qty: cartOffQty
   });
-  let qtyRendered = unitInfoCountable ? qtyValue.toString() : numformat(qtyValue);
+  let qtyRendered = numformat(qtyValue);
+  let active = qtyValue !== 0;
 
   return (
     <div
@@ -99,7 +95,7 @@ export const OfferingCard = (props: OfferingCardProps): ReactElement => {
           : "cursor-pointer"
       )}
       onClick={e => {
-        if (!preventAddition && qtyValue == 0) addToCart(item);
+        if (!preventAddition && !active) addToCart(item);
         e.stopPropagation();
       }}
     >
@@ -119,7 +115,8 @@ export const OfferingCard = (props: OfferingCardProps): ReactElement => {
         <div className='nt table-cell h-full w-1/3'>
           <ProductCounter
             onIncrement={() => {
-              addToCart(item);
+              if (!preventAddition)
+                addToCart(item);
             }}
             onDecrement={() => {
               updateEntryQuantity(

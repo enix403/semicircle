@@ -1,4 +1,5 @@
 import React from "react";
+
 import { OfferingCard } from "./OfferingCard";
 import { useTerminalStore } from "./state/store";
 
@@ -29,7 +30,7 @@ export const OfferingsPane = React.memo(() => {
     <>
       <div className='flex h-full flex-wrap content-start overflow-y-auto p-4'>
         {slicedItems.map(item => (
-          <div key={item.id} className='h-40 w-1/3 px-2 pt-2 md:w-1/4 lg:w-1/5'>
+          <div key={item.id} className='h-40 w-1/5 px-2 pt-2'>
             <OfferingCard item={item} />
           </div>
         ))}

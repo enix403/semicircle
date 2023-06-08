@@ -20,12 +20,21 @@ export type CartEntry<T, QtyType> = {
 export type CartItemEntry = CartEntry<Item, CompleteCompositeQuantity>;
 // export type CartServiceEntry = CartEntry<Service, number>;
 
+
+export const enum Stage {
+  Idle,
+  Checkout,
+  PostCheckout
+};
+
 export interface TerminalState {
   offerings: Offerings;
   cart: {
     items: CartItemEntry[];
     // services: CartServiceEntry[],
   };
+
+  stage: Stage;
 }
 
 export type StoreSetCallback = (store: TerminalStore) => void;
@@ -62,6 +71,8 @@ export const terminalStore = createStore<
           items: []
           // services: []
         },
+
+        stage: Stage.Idle,
 
         /* actions */
         mutate: callback => {
