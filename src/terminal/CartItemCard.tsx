@@ -132,7 +132,7 @@ export const CartItemCard = React.memo(
     return (
       <div
         className={cx(
-          "group mt-4 overflow-hidden rounded-md border-2 bg-white shadow-lg transition-all first:mt-0",
+          "group overflow-hidden rounded-md border-2 bg-white shadow-lg transition-all",
           isZero ? "invalid border border-red-500 shadow-2xl shadow-red-400" : "border-blue-500",
           expanded && "expanded"
         )}

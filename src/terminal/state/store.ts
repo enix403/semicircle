@@ -20,12 +20,11 @@ export type CartEntry<T, QtyType> = {
 export type CartItemEntry = CartEntry<Item, CompleteCompositeQuantity>;
 // export type CartServiceEntry = CartEntry<Service, number>;
 
-
 export const enum Stage {
   Idle,
   Checkout,
   PostCheckout
-};
+}
 
 export interface TerminalState {
   offerings: Offerings;
@@ -48,6 +47,8 @@ export interface TerminalActions {
   updateEntryQuantity: (item: Item, newQty: CompositeQuantity, removeIfZero?: boolean) => void;
 
   removeEntry: (item: Item) => void;
+
+  setStage: (stage: Stage) => void;
 
   //
   mutate: (callback: StoreSetCallback) => void;
@@ -97,7 +98,12 @@ export const terminalStore = createStore<
         updateEntryQuantity: (item, newQty, removeIfZero) =>
           actions.updateEntryQuantity(item, newQty, removeIfZero || false, set),
 
-        removeEntry: item => actions.updateEntryQuantity(item, QuantityM.zeroC, true, set)
+        removeEntry: item => actions.updateEntryQuantity(item, QuantityM.zeroC, true, set),
+
+        setStage: (stage: Stage) =>
+          set(store => {
+            store.stage = stage;
+          })
       }),
       { name: "pos-terminal-store" }
     )

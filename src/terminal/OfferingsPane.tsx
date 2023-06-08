@@ -22,9 +22,12 @@ export const OfferingsPane = React.memo(() => {
   let last = Math.ceil(allItems.length / PAGE_SIZE) - 1;
   const slicedItems = allItems.slice(base, base + PAGE_SIZE);
 
-  const deltaPage = React.useCallback((delta: number) => {
-    setPage(p => clamp(0, last, p + delta));
-  }, [last]);
+  const deltaPage = React.useCallback(
+    (delta: number) => {
+      setPage(p => clamp(0, last, p + delta));
+    },
+    [last]
+  );
 
   return (
     <>
@@ -44,10 +47,8 @@ export const OfferingsPane = React.memo(() => {
 });
 
 function clamp(min: number, max: number, value: number): number {
-  if (value < min)
-    return min;
-  if (value > max)
-    return max;
+  if (value < min) return min;
+  if (value > max) return max;
 
   return value;
 }

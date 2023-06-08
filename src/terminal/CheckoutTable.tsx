@@ -22,7 +22,7 @@ export function CheckoutTable() {
             let price = item.offering.price;
             const { subtotal, qty } = useSubtotal(item.offQty, price);
             return (
-              <Tr>
+              <Tr key={item.offering.id}>
                 <Td>{item.offering.name}</Td>
                 <Td isNumeric>{numformat(price)}</Td>
                 <Td isNumeric>{qty}</Td>

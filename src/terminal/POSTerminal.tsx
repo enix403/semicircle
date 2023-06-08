@@ -1,15 +1,17 @@
 import { ReactElement, useEffect } from "react";
 
+import { AnimatePresence, HTMLMotionProps, motion } from "framer-motion";
+
 import { FlexGrow } from "components/FlexGrow/FlexGrow";
 import { callProtoService } from "repositories";
 import { QueryItems } from "types/protos-ts/offerings_pb";
 import { QuantityM } from "types/quantification";
-import { CartView } from './CartView';
+import { CartView } from "./CartView";
 import { CheckoutTable } from "./CheckoutTable";
-import { Financials } from './Financials';
-import { OfferingsPane } from './OfferingsPane';
+import { Financials } from "./Financials";
+import { OfferingsPane } from "./OfferingsPane";
 import { numformat } from "./common";
-import { useTerminalStore } from "./state/store";
+import { Stage, useTerminalStore } from "./state/store";
 
 import "./terminal-global.css";
 
@@ -28,6 +30,7 @@ function StatBlock(props: StatBlockProps) {
 
 function Stats() {
   const items = useTerminalStore(store => store.cart.items);
+  const setStage = useTerminalStore(store => store.setStage);
 
   const totalBill = items.reduce((total, item) => {
     let qtyValue = QuantityM.numericValueC(item.offQty);
@@ -42,10 +45,11 @@ function Stats() {
       <FlexGrow />
       <div
         className='
-          box-center ml-4 cursor-pointer rounded-md border-2 border-green-300 px-3
-          font-semibold text-green-300 hover:bg-green-300/80 hover:text-black
-          h-14
+          box-center ml-4 h-14 cursor-pointer rounded-md border-2 border-green-300
+          px-3 font-semibold text-green-300 hover:bg-green-300/80
+          hover:text-black
         '
+        onClick={() => items.length !== 0 && setStage(Stage.Checkout)}
       >
         Checkout
       </div>
@@ -53,8 +57,17 @@ function Stats() {
   );
 }
 
+const animationProps: HTMLMotionProps<"div"> = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
+  transition: { duration: 0.1 },
+  className: "flex flex-[1.5] flex-col"
+};
+
 export function POSTerminal(): ReactElement {
   const updateOfferings = useTerminalStore(store => store.updateOfferings);
+  const stage = useTerminalStore(store => store.stage);
 
   useEffect(() => {
     (async function () {
@@ -75,16 +88,35 @@ export function POSTerminal(): ReactElement {
   return (
     <>
       <div className='flex h-full max-h-full overflow-hidden'>
-        <div className='flex flex-[1.5] flex-col'>
-          {/* <OfferingsPane /> */}
-          {/* <Stats /> */}
+        <AnimatePresence mode='wait'>
+          {stage === Stage.Idle && (
+            <motion.div key='idle' {...animationProps}>
+              <OfferingsPane />
+              <Stats />
+            </motion.div>
+          )}
 
-          <Financials />
+          {stage === Stage.Checkout && (
+            <motion.div key='checkout' {...animationProps}>
+              <Financials />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        </div>
         <div className='flex flex-1 flex-col border-l-2 border-zinc-300 bg-slate-100'>
-          <CartView />
-          {/* <CheckoutTable /> */}
+          <AnimatePresence mode='wait'>
+            {stage === Stage.Idle && (
+              <motion.div key='idle' {...animationProps}>
+                <CartView />
+              </motion.div>
+            )}
+
+            {stage === Stage.Checkout && (
+              <motion.div key='checkout' {...animationProps}>
+                <CheckoutTable />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </>

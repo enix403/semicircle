@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef } from "react";
 
 import {
   AlertDialog,
@@ -12,6 +12,7 @@ import {
   useDisclosure
 } from "@chakra-ui/react";
 import { Snowflake } from "@phosphor-icons/react";
+import { AnimatePresence, HTMLMotionProps, motion } from "framer-motion";
 
 import { CartItemCard } from "./CartItemCard";
 import { useTerminalStore } from "./state/store";
@@ -67,9 +68,23 @@ export function CartView() {
         </div>
       )}
       <div className='flex-1 overflow-y-auto p-5 pt-2'>
-        {items.map(entry => (
-          <CartItemCard key={entry.offering.id} itemEntry={entry} />
-        ))}
+        <AnimatePresence>
+          {items.map(entry => (
+            <motion.div
+              initial={{
+                opacity: 0
+              }}
+              animate={{
+                opacity: 1
+              }}
+              transition={{ duration: 0.1 }}
+              className='mt-4 first:mt-0'
+              key={entry.offering.id}
+            >
+              <CartItemCard itemEntry={entry} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
         {itemCount == 0 && (
           <div className='box-center m-2 h-full flex-col'>
             <Snowflake weight='light' size='16rem' />

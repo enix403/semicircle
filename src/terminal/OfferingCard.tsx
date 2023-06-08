@@ -115,8 +115,7 @@ export const OfferingCard = (props: OfferingCardProps) => {
         <div className='nt table-cell h-full w-1/3'>
           <ProductCounter
             onIncrement={() => {
-              if (!preventAddition)
-                addToCart(item);
+              if (!preventAddition) addToCart(item);
             }}
             onDecrement={() => {
               updateEntryQuantity(

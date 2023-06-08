@@ -18,7 +18,7 @@ export function Financials() {
           <Input placeholder='Discount' type='number' />
         </FormControl>
 
-        <FormLabel className="mt-6">Payment Mode</FormLabel>
+        <FormLabel className='mt-6'>Payment Mode</FormLabel>
         <div className='mb-6 flex'>
           <div
             className={cx(
@@ -61,19 +61,19 @@ export function Financials() {
         <div className='order-summary'>
           <div className='bg-teal-400/20'>
             <p className='alt-font-1 text-xl font-semibold text-teal-600'>14</p>
-            <p className='text-sm mt-1 text-teal-600'>Item Count</p>
+            <p className='mt-1 text-sm text-teal-600'>Item Count</p>
           </div>
           <div className='bg-pink-400/20'>
             <p className='alt-font-1 text-xl font-semibold text-pink-600'>23,500</p>
-            <p className='text-sm mt-1 text-pink-600'>Total Bill</p>
+            <p className='mt-1 text-sm text-pink-600'>Total Bill</p>
           </div>
           <div className='bg-blue-400/20'>
             <p className='alt-font-1 text-xl font-semibold text-blue-600'>23,000</p>
-            <p className='text-sm mt-1 text-blue-600'>Total Payable</p>
+            <p className='mt-1 text-sm text-blue-600'>Total Payable</p>
           </div>
           <div className='bg-yellow-400/20'>
             <p className='alt-font-1 text-xl font-semibold text-yellow-600'>N/A</p>
-            <p className='text-sm mt-1 text-yellow-600'>Change</p>
+            <p className='mt-1 text-sm text-yellow-600'>Change</p>
           </div>
         </div>
       </div>
