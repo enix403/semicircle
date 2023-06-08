@@ -10,6 +10,12 @@
     @apply items-center;
     @apply justify-center;
   }
+
+  .box-center-v {
+    @apply flex flex-col;
+    @apply items-center;
+    @apply justify-center;
+  }
 }
 
 * {

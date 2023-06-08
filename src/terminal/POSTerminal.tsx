@@ -6,6 +6,7 @@ import { QueryItems } from "types/protos-ts/offerings_pb";
 import { QuantityM } from "types/quantification";
 import { CartView } from './CartView';
 import { CheckoutTable } from "./CheckoutTable";
+import { Financials } from './Financials';
 import { OfferingsPane } from './OfferingsPane';
 import { numformat } from "./common";
 import { useTerminalStore } from "./state/store";
@@ -35,7 +36,7 @@ function Stats() {
   }, 0);
 
   return (
-    <div className='flex border-t-8 border-cyan-900 bg-cyan-800 px-4 py-4 anim-stat-block'>
+    <div className='flex border-t-8 border-cyan-900 bg-cyan-800 px-4 py-4'>
       <StatBlock name='Item Count' value={items.length} />
       <StatBlock name='Total Bill' value={numformat(totalBill)} />
       <FlexGrow />
@@ -75,8 +76,11 @@ export function POSTerminal(): ReactElement {
     <>
       <div className='flex h-full max-h-full overflow-hidden'>
         <div className='flex flex-[1.5] flex-col'>
-          <OfferingsPane />
-          <Stats />
+          {/* <OfferingsPane /> */}
+          {/* <Stats /> */}
+
+          <Financials />
+
         </div>
         <div className='flex flex-1 flex-col border-l-2 border-zinc-300 bg-slate-100'>
           <CartView />

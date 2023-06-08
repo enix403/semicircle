@@ -11,15 +11,12 @@
   pointer-events: auto !important;
 }
 
-/*
-.anim-stat-block {
-  transition: max-height 1s ease-out 1s;
-  z-index: 500;
-  height: 1000px;
-  max-height: 100px;
-}
 
-.anim-stat-block.expanded {
-  max-height: 800px;
+.order-summary {
+  @apply flex rounded-lg border border-l-zinc-200;
 }
-*/
+.order-summary > div {
+  @apply h-full min-w-[128px] flex-1 border-r border-zinc-200;
+  @apply last:border-r-0;
+  @apply p-6;
+}
