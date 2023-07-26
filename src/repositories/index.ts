@@ -2,6 +2,7 @@ import { MessageType } from "@protobuf-ts/runtime";
 import { CmdCreateItem, Item, QueryItems } from "types/protos-ts/offerings_pb";
 
 let API_URL = "http://localhost:12096/api/v1";
+const SQRET_FIELD_NO = 1601;
 
 const serviceToPathMap = new Map<MessageType<any>, string>();
 {
@@ -28,7 +29,6 @@ export async function callProtoService<T extends object>(
 
   let asJson = $ty.toJsonString(created, {
     emitDefaultValues: true,
-    useProtoFieldName: false // FIXME: Temporary hack
   });
 
   let url = API_URL + remotePath;
@@ -57,8 +57,16 @@ export async function callProtoService<T extends object>(
     return null;
   }
 
-  const result = await apiResponse.json();
-  return result;
+  const rawAnswer = await apiResponse.text();
+
+  let retTyField = $ty.fields.find(f => f.no === SQRET_FIELD_NO);
+  if (retTyField === undefined || retTyField.kind !== 'message') {
+    return JSON.parse(rawAnswer);
+  }
+
+  return retTyField.T().fromJsonString(rawAnswer, {
+    ignoreUnknownFields: true
+  });
 }
 
 (<any>window).callProtoService = callProtoService;

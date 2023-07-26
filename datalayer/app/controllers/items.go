@@ -14,9 +14,6 @@ import (
 
 var marshaller = protojson.MarshalOptions{
 	EmitUnpopulated: true,
-	UseProtoNames:   false, // FIXME: Temporary hack
-	// this makes the client structures agree with its types
-	// use proper reponse type detection mechanism on client side
 }
 
 var unmarshaller = protojson.UnmarshalOptions{
@@ -46,9 +43,6 @@ func (ctrl ControllerSet) HandleQueryItems(c *fiber.Ctx) error {
 func (ctrl ControllerSet) HandleCmdCreateItem(c *fiber.Ctx) error {
 	cmd := pm.CmdCreateItem{}
 
-	// if err := c.BodyParser(&cmd); err != nil {
-	//     return c.SendStatus(401)
-	// }
 	if err := unmarshaller.Unmarshal(c.Body(), &cmd); err != nil {
 		fmt.Println("Unmarshal Error = ", err)
 		return c.SendStatus(401)
