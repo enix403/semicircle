@@ -1,3 +1,4 @@
+import cx from 'classnames';
 import { ReactElement, useEffect } from "react";
 
 import { AnimatePresence, HTMLMotionProps, motion } from "framer-motion";
@@ -5,12 +6,11 @@ import { AnimatePresence, HTMLMotionProps, motion } from "framer-motion";
 import { FlexGrow } from "components/FlexGrow/FlexGrow";
 import { callProtoService } from "repositories";
 import { QueryItems } from "types/protos-ts/offerings_pb";
-import { QuantityM } from "types/quantification";
 import { CartView } from "./CartView";
 import { CheckoutTable } from "./CheckoutTable";
 import { Financials } from "./Financials";
 import { OfferingsPane } from "./OfferingsPane";
-import { numformat } from "./common";
+import { numformat, useTotalBill } from "./common";
 import { Stage, useTerminalStore } from "./state/store";
 
 import "./terminal-global.css";
@@ -29,27 +29,23 @@ function StatBlock(props: StatBlockProps) {
 }
 
 function Stats() {
-  const items = useTerminalStore(store => store.cart.items);
+  const itemCount = useTerminalStore(store => store.cart.items.length);
   const setStage = useTerminalStore(store => store.setStage);
-
-  const totalBill = items.reduce((total, item) => {
-    let qtyValue = QuantityM.numericValueC(item.offQty);
-    let subtotal = item.offering.price * qtyValue;
-    return total + subtotal;
-  }, 0);
+  const totalBill = useTerminalStore(useTotalBill);
 
   return (
     <div className='flex border-t-8 border-cyan-900 bg-cyan-800 px-4 py-4'>
-      <StatBlock name='Item Count' value={items.length} />
+      <StatBlock name='Item Count' value={itemCount} />
       <StatBlock name='Total Bill' value={numformat(totalBill)} />
       <FlexGrow />
       <div
-        className='
-          box-center ml-4 h-14 cursor-pointer rounded-md border-2 border-green-300
-          px-3 font-semibold text-green-300 hover:bg-green-300/80
-          hover:text-black
-        '
-        onClick={() => items.length !== 0 && setStage(Stage.Checkout)}
+        className={cx(
+          'box-center transition-colors ml-4 h-14 rounded-md border-2 px-3 font-semibold',
+          itemCount !== 0 ?
+            "cursor-pointer border-green-300 text-green-300 hover:bg-green-300/80 hover:text-black" :
+            "cursor-not-allowed border-gray-400/60 text-black/40 bg-gray-600/30"
+        )}
+        onClick={() => itemCount !== 0 && setStage(Stage.Checkout)}
       >
         Checkout
       </div>

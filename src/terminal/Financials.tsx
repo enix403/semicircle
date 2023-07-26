@@ -2,12 +2,15 @@ import { FormControl, FormLabel, Input } from "@chakra-ui/react";
 import { CurrencyDollar, NotePencil } from "@phosphor-icons/react";
 import cx from "classnames";
 
-import { numformat } from "./common";
-import { useTerminalStore } from "./state/store";
+import { numformat, useTotalBill } from "./common";
+import { TerminalStore, useTerminalStore } from "./state/store";
 
-// const SummaryChip = (props: React.HTML/)
 
 export function Financials() {
+
+  const itemCount = useTerminalStore(store => store.cart.items.length);
+  const totalBill = useTerminalStore(useTotalBill);
+
   const mode = "cash" as string;
 
   return (
@@ -60,11 +63,11 @@ export function Financials() {
 
         <div className='order-summary'>
           <div className='bg-teal-400/20'>
-            <p className='alt-font-1 text-xl font-semibold text-teal-600'>14</p>
+            <p className='alt-font-1 text-xl font-semibold text-teal-600'>{itemCount}</p>
             <p className='mt-1 text-sm text-teal-600'>Item Count</p>
           </div>
           <div className='bg-pink-400/20'>
-            <p className='alt-font-1 text-xl font-semibold text-pink-600'>23,500</p>
+            <p className='alt-font-1 text-xl font-semibold text-pink-600'>{ numformat(totalBill)} </p>
             <p className='mt-1 text-sm text-pink-600'>Total Bill</p>
           </div>
           <div className='bg-blue-400/20'>
