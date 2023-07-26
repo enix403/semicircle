@@ -21,7 +21,7 @@ var unmarshaller = protojson.UnmarshalOptions{
 }
 
 
-func (ctrl ControllerSet) HandleQueryItems(c *fiber.Ctx) error {
+func (ctrl ControllerSet) QueryItems(c *fiber.Ctx) error {
 	list := pm.ItemList{}
 
 	var items []m.Item
@@ -40,7 +40,7 @@ func (ctrl ControllerSet) HandleQueryItems(c *fiber.Ctx) error {
 	return c.JSON(json.RawMessage(resp[:]))
 }
 
-func (ctrl ControllerSet) HandleCmdCreateItem(c *fiber.Ctx) error {
+func (ctrl ControllerSet) CmdCreateItem(c *fiber.Ctx) error {
 	cmd := pm.CmdCreateItem{}
 
 	if err := unmarshaller.Unmarshal(c.Body(), &cmd); err != nil {
@@ -50,35 +50,3 @@ func (ctrl ControllerSet) HandleCmdCreateItem(c *fiber.Ctx) error {
 
 	return c.JSON("Hello")
 }
-
-/*
-import (
-)
-
-type GetQueryItems struct {
-	IncludeInactive       bool
-	Kind                  c.ItemKind
-	IncludeNotOpenForSale bool
-}
-
-func (q *GetQueryItems) Execute(app *c.Application) []m.Item {
-	conds := make(map[string]interface{}, 3)
-
-	if !q.IncludeInactive {
-		conds["Active"] = true
-	}
-
-	if q.Kind != "" {
-		conds["Kind"] = q.Kind
-	}
-
-	if !q.IncludeNotOpenForSale {
-		conds["OpenForSale"] = true
-	}
-
-	var items []m.Item
-	app.Db.Model(&m.Item{}).Where(conds).Find(&items)
-
-	return items
-}
-*/

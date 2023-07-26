@@ -9,6 +9,8 @@ type ControllerSet struct {
 	App *c.Application
 }
 
+/* TESTING */
+
 type Ping_Out struct {
 	PingValue string `json:"ping"`
 }

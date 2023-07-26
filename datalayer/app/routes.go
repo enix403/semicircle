@@ -13,9 +13,12 @@ func LoadRoutes(app *c.Application) {
 
 	v1.Get("/", ctrlset.Ping)
 
-	queriesPath := v1.Group("/q")
-	cmdsPath := v1.Group("/c")
+	v1.All("/s/QueryItems", ctrlset.QueryItems)
+	v1.All("/s/CmdCreateItem", ctrlset.CmdCreateItem)
 
-	queriesPath.All("/items", ctrlset.HandleQueryItems)
-	cmdsPath.All("/create-item", ctrlset.HandleCmdCreateItem)
+	// queriesPath := v1.Group("/q")
+	// cmdsPath := v1.Group("/c")
+
+	// queriesPath.All("/items", ctrlset.HandleQueryItems)
+	// cmdsPath.All("/create-item", ctrlset.HandleCmdCreateItem)
 }

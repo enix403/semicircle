@@ -4,12 +4,6 @@ import { CmdCreateItem, Item, QueryItems } from "types/protos-ts/offerings_pb";
 let API_URL = "http://localhost:12096/api/v1";
 const SQRET_FIELD_NO = 1601;
 
-const serviceToPathMap = new Map<MessageType<any>, string>();
-{
-  serviceToPathMap.set(QueryItems, "/q/items");
-  serviceToPathMap.set(CmdCreateItem, "/c/create-item");
-}
-
 type ProtoServiceAnswer<T> = T extends { SQRet?: infer R } ? R : any;
 type ProtoServicePayload<T> = Parameters<MessageType<Omit<T, "SQRet">>["create"]>[0];
 
@@ -17,11 +11,9 @@ export async function callProtoService<T extends object>(
   $ty: MessageType<T>,
   query?: ProtoServicePayload<T>
 ): Promise<ProtoServiceAnswer<T> | null> {
-  let remotePath = serviceToPathMap.get($ty);
-
-  if (remotePath === undefined) {
-    return null;
-  }
+  let parts = $ty.typeName.split('.');
+  let serviceName = parts[parts.length - 1];
+  let remotePath = "/s/" + serviceName;
 
   let created = $ty.create({
     ...(query || {})
