@@ -3,19 +3,26 @@ import { CurrencyDollar, NotePencil } from "@phosphor-icons/react";
 import cx from "classnames";
 
 import { numformat, useTotalBill } from "./common";
-import { TerminalStore, useTerminalStore } from "./state/store";
-
+import { Stage, TerminalStore, useTerminalStore } from "./state/store";
 
 export function Financials() {
-
   const itemCount = useTerminalStore(store => store.cart.items.length);
   const totalBill = useTerminalStore(useTotalBill);
+  const setStage = useTerminalStore(store => store.setStage);
 
   const mode = "cash" as string;
 
   return (
     <>
       <div className=' p-8'>
+        <button
+          className='mb-4 rounded-half bg-blue-high px-3 py-3 font-medium hover:bg-blue-high/70'
+          onClick={() => {
+            setStage(Stage.Idle);
+          }}
+        >
+          Cancel
+        </button>
         <FormControl size='lg'>
           <FormLabel>Enter Discount</FormLabel>
           <Input placeholder='Discount' type='number' />
@@ -67,16 +74,18 @@ export function Financials() {
             <p className='mt-1 text-sm text-teal-600'>Item Count</p>
           </div>
           <div className='bg-pink-400/20'>
-            <p className='alt-font-1 text-xl font-semibold text-pink-600'>{ numformat(totalBill)} </p>
-            <p className='mt-1 text-sm text-pink-600'>Total Bill</p>
+            <p className='alt-font-1 text-pink-600 text-xl font-semibold'>
+              {numformat(totalBill)}{" "}
+            </p>
+            <p className='text-pink-600 mt-1 text-sm'>Total Bill</p>
           </div>
           <div className='bg-blue-400/20'>
             <p className='alt-font-1 text-xl font-semibold text-blue-600'>23,000</p>
             <p className='mt-1 text-sm text-blue-600'>Total Payable</p>
           </div>
           <div className='bg-yellow-400/20'>
-            <p className='alt-font-1 text-xl font-semibold text-yellow-600'>N/A</p>
-            <p className='mt-1 text-sm text-yellow-600'>Change</p>
+            <p className='alt-font-1 text-yellow-600 text-xl font-semibold'>N/A</p>
+            <p className='text-yellow-600 mt-1 text-sm'>Change</p>
           </div>
         </div>
       </div>

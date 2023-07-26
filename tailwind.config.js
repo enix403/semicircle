@@ -28,7 +28,20 @@ const config = {
             opacity: "1"
           }
         }
-      }
+      },
+      colors: {
+        "a-blue": {
+          low: "#178C8A",
+          high: "#5CE5E2"
+        },
+        "a-yellow": "#FFEA7F",
+        "a-pink": "#FF6685"
+      },
+      borderRadius: {
+        card: "0.625rem",
+        half: "0.3125rem",
+        "2.5xl": "1.25rem"
+      },
     }
   },
   experimental: { optimizeUniversalDefaults: true },
